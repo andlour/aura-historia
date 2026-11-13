@@ -1,837 +1,2582 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA — Guardiões do Tempo</title>
-    <style>
-        :root {
-            --bg-color: #0d1117;
-            --panel-bg: #161b22;
-            --border-color: #30363d;
-            --text-main: #c9d1d9;
-            --accent-cyan: #58a6ff;
-            --accent-green: #238636;
-            --accent-red: #da3633;
-            --accent-purple: #8957e5;
-            --warning-yellow: #d29922;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>História da Eletricidade — Prof. André Lourenço</title>
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & TOKENS — HISTÓRIA DA TECNOLOGIA (ENSINO SUPERIOR)
+       Estética: Documentário Científico Contemporâneo (Dark Slate + Âmbar + Ciano)
+       ========================================================================== */
+    :root {
+      --bg-deep: #090d16;
+      --bg-surface: #111827;
+      --bg-elevated: #1a2333;
+      --bg-glass: rgba(17, 24, 39, 0.88);
+      --border-subtle: rgba(148, 163, 184, 0.16);
+      --border-strong: rgba(245, 158, 11, 0.45);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-amber: #f59e0b;
+      --accent-amber-glow: rgba(245, 158, 11, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-cyan-glow: rgba(56, 189, 248, 0.22);
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-mono: 'Fira Code', 'Courier New', monospace;
+      --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 700px;
-            position: relative;
-        }
+    /* ==========================================================================
+       VIEWPORT 16:9 & SLIDE STAGE
+       ========================================================================== */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 15% 20%, #151f33 0%, #090d16 70%);
+    }
 
-        header {
-            background: #21262d;
-            padding: 16px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
+    /* Top Bar Minimalista */
+    .topbar {
+      height: 46px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(9, 13, 22, 0.9);
+      backdrop-filter: blur(8px);
+      z-index: 40;
+      flex-shrink: 0;
+    }
 
-        header h1 {
-            font-size: 1.4rem;
-            color: #fff;
-            letter-spacing: 2px;
-        }
+    .brand-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
 
-        header p {
-            font-size: 0.8rem;
-            color: var(--accent-cyan);
-            margin-top: 4px;
-        }
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      box-shadow: 0 0 10px var(--accent-amber);
+    }
 
-        .screen {
-            display: none;
-            flex-direction: column;
-            padding: 20px;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
+    .module-pill {
+      font-size: 0.78rem;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      font-weight: 600;
+    }
 
-        .screen.active {
-            display: flex;
-        }
+    .topbar-metrics {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--accent-amber);
+      font-weight: 700;
+    }
 
-        label {
-            display: block;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            color: var(--text-main);
-            font-weight: 600;
-        }
+    /* Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.07);
+      flex-shrink: 0;
+    }
 
-        input[type="text"], select, textarea {
-            width: 100%;
-            padding: 10px 12px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: #fff;
-            font-size: 0.95rem;
-        }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-amber));
+      transition: width 0.4s var(--transition-smooth);
+    }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-cyan);
-        }
+    /* Stage Wrapper */
+    .stage-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      overflow: hidden;
+      position: relative;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: var(--accent-green);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
+    .slide-frame {
+      width: 100%;
+      max-width: 1440px;
+      aspect-ratio: 16 / 9;
+      max-height: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-        button:hover {
-            background: #2ea043;
-        }
+    /* Slide Individual */
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      padding: 36px 48px;
+      overflow-y: auto;
+      animation: slideEnter 0.48s var(--transition-smooth) forwards;
+    }
 
-        button.secondary {
-            background: #21262d;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-        }
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-        button.secondary:hover {
-            background: #30363d;
-            color: #fff;
-        }
+    @keyframes slideEnter {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.992);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
 
-        .home-menu {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            text-align: center;
-            gap: 15px;
-        }
+    /* ==========================================================================
+       TIPOGRAFIA & HIERARQUIA
+       ========================================================================== */
+    .kicker {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-amber);
+      margin-bottom: 6px;
+    }
 
-        .home-menu h2 {
-            font-size: 1.8rem;
-            color: #fff;
-            margin-bottom: 5px;
-        }
+    h1.hero-title {
+      font-size: clamp(2.1rem, 3.6vw, 3.4rem);
+      line-height: 1.12;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
 
-        .home-menu p {
-            font-size: 0.9rem;
-            color: #8b949e;
-            max-width: 320px;
-            margin-bottom: 20px;
-        }
+    h2.slide-title {
+      font-size: clamp(1.45rem, 2.3vw, 2.05rem);
+      line-height: 1.2;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
 
-        #gameCanvas {
-            background: #000;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            display: block;
-            margin: 0 auto;
-        }
+    p.lead {
+      font-size: clamp(1rem, 1.25vw, 1.18rem);
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 78ch;
+    }
 
-        .game-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            padding: 8px 12px;
-            background: var(--bg-color);
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-        }
+    p.body-text {
+      font-size: clamp(0.92rem, 1.08vw, 1.04rem);
+      line-height: 1.62;
+      color: var(--text-secondary);
+    }
 
-        .question-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 17, 23, 0.95);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            padding: 24px;
-            z-index: 10;
-        }
+    strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
 
-        .question-overlay.active {
-            display: flex;
-        }
+    /* ==========================================================================
+       LAYOUTS VARIADOS (SEM EXCESSO DE BORDAS)
+       ========================================================================== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+      flex: 1;
+    }
 
-        .q-badge {
-            background: var(--warning-yellow);
-            color: #000;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            align-self: flex-start;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
+    .grid-2-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: stretch;
+      flex: 1;
+    }
 
-        .q-title {
-            font-size: 1.1rem;
-            color: #fff;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      flex: 1;
+      align-items: stretch;
+    }
 
-        .q-option {
-            background: #21262d;
-            border: 1px solid var(--border-color);
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            color: #fff;
-            transition: all 0.2s;
-        }
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+      height: 100%;
+    }
 
-        .q-option:hover {
-            border-color: var(--accent-cyan);
-            background: #30363d;
-        }
+    /* Imagens Reais & Zoom */
+    .media-figure {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #070b12;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      cursor: zoom-in;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
 
-        .timer-bar-container {
-            width: 100%;
-            height: 6px;
-            background: var(--border-color);
-            border-radius: 3px;
-            margin-top: 15px;
-            overflow: hidden;
-        }
+    .media-figure:hover {
+      border-color: var(--accent-cyan);
+    }
 
-        .timer-bar {
-            width: 100%;
-            height: 100%;
-            background: var(--accent-cyan);
-            transition: width 1s linear;
-        }
+    .media-figure img {
+      width: 100%;
+      height: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s var(--transition-smooth);
+    }
 
-        .card-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
-            margin-bottom: 15px;
-        }
+    .media-figure.contain img {
+      object-fit: contain;
+      background: #0d131f;
+      padding: 8px;
+    }
 
-        .card-item {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .media-figure:hover img {
+      transform: scale(1.03);
+    }
 
-        .card-info h4 {
-            font-size: 0.95rem;
-            color: #fff;
-        }
+    .media-caption {
+      padding: 8px 12px;
+      font-size: 0.74rem;
+      line-height: 1.35;
+      color: var(--text-muted);
+      background: rgba(9, 13, 22, 0.92);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .card-info p {
-            font-size: 0.75rem;
-            color: #8b949e;
-            margin-top: 3px;
-        }
+    .zoom-hint {
+      color: var(--accent-cyan);
+      font-weight: 600;
+      white-space: nowrap;
+    }
 
-        .badge-code {
-            background: var(--accent-purple);
-            color: #fff;
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
+    /* Bloco de Destaque Conceitual */
+    .concept-strip {
+      border-left: 3px solid var(--accent-amber);
+      padding: 12px 18px;
+      background: rgba(245, 158, 11, 0.06);
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+    }
 
-        .feedback-msg {
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
+    .concept-strip.cyan {
+      border-left-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.06);
+    }
 
-        .feedback-msg.success { background: rgba(35, 134, 54, 0.2); border: 1px solid var(--accent-green); color: #4ac26b; }
-        .feedback-msg.error { background: rgba(218, 54, 51, 0.2); border: 1px solid var(--accent-red); color: #f85149; }
+    .data-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            font-size: 0.85rem;
-        }
+    .data-list li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
 
-        .ranking-table th, .ranking-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-        }
+    .data-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+    }
 
-        .ranking-table th {
-            color: #8b949e;
-            font-weight: 600;
-        }
-    </style>
+    /* ==========================================================================
+       ELEMENTOS INTERATIVOS (HOTSPOTS, FLIP, SIMULADOR, TIMELINE, ASSOCIAÇÃO)
+       ========================================================================== */
+    /* Hotspots sobre Fotografia */
+    .hotspot-stage {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: #070b12;
+    }
+
+    .hotspot-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hotspot-pin {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      color: #090d16;
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      animation: pulsePin 2s infinite;
+      transition: transform 0.2s;
+    }
+
+    .hotspot-pin:hover, .hotspot-pin.active {
+      transform: translate(-50%, -50%) scale(1.18);
+      background: var(--accent-cyan);
+    }
+
+    @keyframes pulsePin {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .hotspot-readout {
+      padding: 16px 20px;
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Cartões Viráveis (Flip Cards) */
+    .flip-card {
+      perspective: 1000px;
+      height: 250px;
+      cursor: pointer;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s var(--transition-smooth);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-front, .flip-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .flip-front {
+      background: var(--bg-elevated);
+    }
+
+    .flip-back {
+      background: #132238;
+      border-color: var(--accent-cyan);
+      transform: rotateY(180deg);
+    }
+
+    /* Curiosidade Desbloqueável / Revelação */
+    .reveal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reveal-btn:hover {
+      background: var(--accent-cyan);
+      color: #090d16;
+    }
+
+    .reveal-box {
+      display: none;
+      margin-top: 12px;
+      padding: 14px 18px;
+      background: rgba(16, 185, 129, 0.08);
+      border-left: 3px solid var(--accent-emerald);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      animation: slideEnter 0.3s ease;
+    }
+
+    .reveal-box.open {
+      display: block;
+    }
+
+    /* Simulador Interativo (Perdas CC vs CA / Lei de Joule) */
+    .sim-panel {
+      background: var(--bg-elevated);
+      padding: 20px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .sim-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 14px 0;
+    }
+
+    .sim-controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    input[type="range"] {
+      accent-color: var(--accent-amber);
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .sim-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 18px;
+      background: #090d16;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      transition: width 0.35s ease;
+    }
+
+    /* Linha do Tempo Explorável */
+    .timeline-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .t-tab {
+      padding: 7px 14px;
+      border-radius: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .t-tab.active {
+      background: var(--accent-amber);
+      color: #090d16;
+      border-color: var(--accent-amber);
+    }
+
+    /* Atividade de Associação (Matching acessível por clique) */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .match-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .match-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .match-item:hover:not(:disabled) {
+      border-color: var(--accent-cyan);
+    }
+
+    .match-item.selected {
+      border-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.16);
+    }
+
+    .match-item.matched {
+      border-color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.16);
+      color: #a7f3d0;
+      cursor: default;
+    }
+
+    /* ==========================================================================
+       QUIZ INTERATIVO (EXATAMENTE 3 SLIDES POR MÓDULO)
+       ========================================================================== */
+    .quiz-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .quiz-layout.with-media {
+      grid-template-columns: 0.85fr 1.15fr;
+      max-width: 100%;
+      align-items: start;
+    }
+
+    .quiz-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(245, 158, 11, 0.16);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      margin-bottom: 8px;
+    }
+
+    .quiz-question {
+      font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+      font-weight: 600;
+      line-height: 1.45;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quiz-opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 9px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover:not(:disabled) {
+      border-color: var(--accent-cyan);
+      background: #202b40;
+    }
+
+    .quiz-opt.selected {
+      border-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.14);
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.18);
+      color: #ecfdf5;
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--accent-rose);
+      background: rgba(244, 63, 94, 0.18);
+      color: #ffe4e6;
+    }
+
+    .opt-letter {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: var(--accent-amber);
+      color: #090d16;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+    }
+
+    .quiz-feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+      animation: slideEnter 0.3s ease;
+    }
+
+    .quiz-feedback.ok {
+      background: rgba(16, 185, 129, 0.12);
+      border-left: 4px solid var(--accent-emerald);
+      color: #d1fae5;
+    }
+
+    .quiz-feedback.err {
+      background: rgba(244, 63, 94, 0.12);
+      border-left: 4px solid var(--accent-rose);
+      color: #ffe4e6;
+    }
+
+    /* ==========================================================================
+       NOTAS PEDAGÓGICAS DO PROFESSOR (OCULTÁVEIS)
+       ========================================================================== */
+    .teacher-note {
+      display: none;
+      position: absolute;
+      bottom: 14px;
+      left: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.97);
+      border: 1px solid var(--accent-amber);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      color: #fde68a;
+      z-index: 30;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    body.show-notes .teacher-note {
+      display: block;
+    }
+
+    /* ==========================================================================
+       CONTROL BAR INFERIOR
+       ========================================================================== */
+    .controlbar {
+      height: 52px;
+      padding: 0 20px;
+      background: rgba(9, 13, 22, 0.95);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 40;
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+    }
+
+    .ctrl-btn.active {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      padding: 0 10px;
+    }
+
+    /* ==========================================================================
+       DRAWER DE MÓDULOS & MODAL LIGHTBOX & REVISÃO DE RESPOSTAS
+       ========================================================================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 13, 0.88);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      max-width: 880px;
+      width: 100%;
+      max-height: 86vh;
+      overflow-y: auto;
+      padding: 28px;
+      position: relative;
+    }
+
+    .lightbox-content {
+      max-width: 92vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lightbox-content img {
+      max-width: 90vw;
+      max-height: 78vh;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: #0b111e;
+    }
+
+    .mod-list-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mod-list-item:hover {
+      border-color: var(--accent-amber);
+    }
+
+    /* Modo Projetor (Alto Contraste) */
+    body.projector-mode .slide-frame {
+      background: #000000;
+      border-color: #475569;
+    }
+    body.projector-mode .body-text,
+    body.projector-mode .lead,
+    body.projector-mode .data-list li {
+      color: #f1f5f9;
+    }
+
+    /* Acessibilidade: Movimento Reduzido */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Responsividade Mobile/Tablet */
+    @media (max-width: 960px) {
+      .slide-frame {
+        aspect-ratio: auto;
+        height: 100%;
+      }
+      .slide {
+        padding: 20px;
+      }
+      .grid-2, .grid-2-equal, .grid-3, .hero-layout, .quiz-layout.with-media, .match-grid {
+        grid-template-columns: 1fr;
+      }
+      .topbar .brand-tag span:not(.brand-dot) {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="app-shell">
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="brand-tag">
+        <span class="brand-dot"></span>
+        <span>História da Tecnologia • Prof. André Lourenço</span>
+      </div>
+      <div id="moduleIndicator" class="module-pill">Abertura</div>
+      <div class="topbar-metrics">
+        <span id="onlineStatus" title="Imagens históricas carregadas via Wikimedia Commons">Acervo: Wikimedia Commons</span>
+        <span class="score-badge">Acertos: <span id="scoreVal">0</span> / 12</span>
+      </div>
+    </header>
 
-    <div class="container">
-        <header>
-            <h1>AURA</h1>
-            <p>Guardiões do Tempo — Edição Histórica</p>
-        </header>
-
-        <!-- TELA 1: MENU INICIAL -->
-        <div id="screen-home" class="screen active">
-            <div class="home-menu">
-                <h2>Missão Temporal</h2>
-                <p>Combata invasores utilizando o pensamento histórico, gerencie sua Aura e proteja a base.</p>
-                <button onclick="goToScreen('screen-student-login')">🚀 JOGAR (Entrar com Código)</button>
-                <button class="secondary" onclick="openProfessorDashboard()">👨‍🏫 MODO PROFESSOR</button>
-            </div>
-        </div>
-
-        <!-- TELA 2: LOGIN DO ALUNO -->
-        <div id="screen-student-login" class="screen">
-            <h3>Entrar na Atividade</h3>
-            <p style="font-size: 0.85rem; color: #8b949e; margin: 8px 0 16px 0;">Digite o código da atividade e seu nome real (para o registro do professor).</p>
-            <div class="form-group">
-                <label>Seu Nome Real</label>
-                <input type="text" id="input-realname" placeholder="Ex: João da Silva">
-            </div>
-            <div class="form-group">
-                <label>Código da Atividade</label>
-                <input type="text" id="input-code" placeholder="Ex: HISTDEFAULT" value="HISTDEFAULT" style="text-transform: uppercase;">
-            </div>
-            <button onclick="startStudentSession()">CONECTAR À MISSÃO</button>
-            <button class="secondary" onclick="goToScreen('screen-home')">Voltar</button>
-        </div>
-
-        <!-- TELA 3: ÁREA DO JOGO -->
-        <div id="screen-game" class="screen" style="padding: 10px;">
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
-            <div class="game-stats">
-                <span id="stat-identity">🐆 Onça 472</span>
-                <span id="stat-aura">Aura: 50</span>
-                <span id="stat-combo">Combo: ×1</span>
-            </div>
-            <button class="secondary" style="padding: 8px; margin-top: 8px;" onclick="goToScreen('screen-home')">Sair da Partida</button>
-            
-            <!-- OVERLAY DE PERGUNTA -->
-            <div id="question-overlay" class="question-overlay">
-                <div class="q-badge" id="q-theme-badge">História Moderna</div>
-                <div class="q-title" id="q-enunciado">Carregando pergunta...</div>
-                <div id="q-options-container"></div>
-                <div class="timer-bar-container">
-                    <div id="timer-bar" class="timer-bar"></div>
-                </div>
-                <div id="q-feedback-box" style="display: none;" class="feedback-msg"></div>
-            </div>
-        </div>
-
-        <!-- TELA 4: RESULTADO E RANKING (ALUNO) -->
-        <div id="screen-gameover" class="screen" style="text-align: center;">
-            <h2 style="color: var(--accent-red); margin-bottom: 5px;">💥 FIM DA PARTIDA</h2>
-            <p id="gameover-reason" style="margin-bottom: 15px; font-size: 0.85rem; color: #8b949e;">Sua Base Temporal colapsou.</p>
-            
-            <div style="background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px; text-align: left;">
-                <p>Pontuação: <strong id="res-score" style="color: #fff; float: right;">0</strong></p>
-                <p>Maior Combo: <strong id="res-combo" style="color: #fff; float: right;">1</strong></p>
-                <p>Acertos: <strong id="res-acertos" style="color: #fff; float: right;">0</strong></p>
-            </div>
-
-            <h4 style="font-size: 0.95rem; margin-bottom: 8px; text-align: left;">🏆 Ranking da Turma</h4>
-            <div style="background: var(--bg-color); border-radius: 8px; border: 1px solid var(--border-color); padding: 5px; max-height: 160px; overflow-y: auto; margin-bottom: 15px;">
-                <table class="ranking-table">
-                    <thead>
-                        <tr><th>Pos</th><th>Guardião</th><th>Pontos</th></tr>
-                    </thead>
-                    <tbody id="ranking-tbody">
-                        <!-- Preenchido via JS -->
-                    </tbody>
-                </table>
-            </div>
-
-            <button onclick="goToScreen('screen-home')">Voltar ao Início</button>
-        </div>
-
-        <!-- TELA 5: DASHBOARD DO PROFESSOR -->
-        <div id="screen-prof-dashboard" class="screen">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3>Painel do Professor</h3>
-                <button class="secondary" style="width: auto; padding: 6px 12px; margin: 0;" onclick="goToScreen('screen-home')">Sair</button>
-            </div>
-
-            <p style="font-size: 0.85rem; color: #8b949e; margin-bottom: 10px;">Meus Conjuntos de Questões:</p>
-            <div id="prof-sets-list" class="card-list"></div>
-            <button onclick="openNewSetModal()">+ NOVO CONJUNTO DE QUESTÕES</button>
-
-            <h4 style="margin: 20px 0 10px 0; font-size: 0.95rem;">Relatórios e Turmas Ativas</h4>
-            <div id="prof-reports-list" class="card-list"></div>
-        </div>
-
-        <!-- TELA 6: CRIADOR DE QUESTÕES -->
-        <div id="screen-prof-editor" class="screen">
-            <h3>Criar Novo Conjunto & Questões</h3>
-            <div class="form-group" style="margin-top: 10px;">
-                <label>Nome do Conjunto / Tema</label>
-                <input type="text" id="set-name-input" placeholder="Ex: Revolução Industrial">
-            </div>
-            
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
-
-            <h4 style="font-size: 0.95rem; margin-bottom: 10px;">Adicionar Questão ao Conjunto</h4>
-            <div class="form-group">
-                <label>Enunciado da Questão</label>
-                <textarea id="q-input-enunciado" rows="3" placeholder="Ex: Qual evento marcou..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Alternativa A</label>
-                <input type="text" id="q-input-a" placeholder="Alternativa A">
-            </div>
-            <div class="form-group">
-                <label>Alternativa B</label>
-                <input type="text" id="q-input-b" placeholder="Alternativa B">
-            </div>
-            <div class="form-group">
-                <label>Alternativa C</label>
-                <input type="text" id="q-input-c" placeholder="Alternativa C">
-            </div>
-            <div class="form-group">
-                <label>Qual é a alternativa correta?</label>
-                <select id="q-input-correct">
-                    <option value="0">Alternativa A</option>
-                    <option value="1">Alternativa B</option>
-                    <option value="2">Alternativa C</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Comentário / Feedback Formativo</label>
-                <input type="text" id="q-input-comment" placeholder="Explicação pedagógica...">
-            </div>
-
-            <button onclick="saveNewQuestion()">+ ADICIONAR QUESTÃO</button>
-            <button class="secondary" onclick="finishCreatingSet()">SALVAR E GERAR CÓDIGO</button>
-        </div>
+    <!-- PROGRESS BAR -->
+    <div class="progress-track">
+      <div id="progressFill" class="progress-fill"></div>
     </div>
 
-    <script>
-        let questionSets = JSON.parse(localStorage.getItem('aura_sets')) || [
-            {
-                id: 'HISTDEFAULT',
-                name: 'Revolução Francesa & Contemporâneo',
-                questions: [
-                    { enunciado: "Qual acontecimento marcou o início da Revolução Francesa em 1789?", options: ["Queda da Bastilha", "Congresso de Viena", "Tratado de Versalhes"], correct: 0, comment: "Correto! A Queda da Bastilha simbolizou a derrocada do Antigo Regime." },
-                    { enunciado: "Qual era o principal objetivo do período do Terror?", options: ["Expandir colônias", "Defender a República de inimigos internos e externos", "Restaurar a monarquia"], correct: 1, comment: "Exato! Liderado pelos jacobinos, o governo visava blindar a revolução." }
-                ]
-            }
-        ];
+    <!-- MAIN 16:9 STAGE -->
+    <main class="stage-container">
+      <div class="slide-frame" id="slideFrame">
 
-        let matchHistory = JSON.parse(localStorage.getItem('aura_history')) || [];
+        <!-- ================================================================
+             SLIDE 1: ABERTURA IMPACTANTE
+             ================================================================ -->
+        <section class="slide active" data-module="Abertura & Objetivos" data-index="0">
+          <div class="hero-layout">
+            <div>
+              <div class="kicker">História da Tecnologia • Ensino Superior • 15 min</div>
+              <h1 class="hero-title">História da Eletricidade: Da Centelha Eletrostática às Redes Globais</h1>
+              <p class="lead" style="margin-top: 16px;">
+                Uma jornada técnico-histórica pela domesticação de um fenômeno invisível: como curiosidades de gabinete no século XVII se converteram na infraestrutura energética e informacional da civilização contemporânea.
+              </p>
+              <div class="concept-strip" style="margin-top: 22px;">
+                <strong>Docente:</strong> Prof. André Lourenço &nbsp;|&nbsp; <strong>Estrutura:</strong> 4 Módulos Temáticos + 12 Questões Interativas + Simulações
+              </div>
+              <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="nextSlide()">Iniciar Aula Interativa →</button>
+                <button class="btn-secondary" onclick="toggleModal('modulesModal')">Índice de Módulos</button>
+              </div>
+            </div>
+            <figure class="media-figure" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Benjamin_West,_English_(born_America)_-_Benjamin_Franklin_Drawing_Electricity_from_the_Sky_-_Google_Art_Project.jpg?width=1000" alt="Benjamin Franklin extraindo eletricidade do céu, pintura de Benjamin West (c. 1816)" />
+              <figcaption class="media-caption">
+                <span>Benjamin West, <em>Benjamin Franklin Drawing Electricity from the Sky</em> (c. 1816). Domínio Público / Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica (Prof. André Lourenço):</strong> Tempo sugerido: 1 min. Contextualize que a eletricidade não foi "inventada", mas gradualmente teorizada, armazenada, convertida em trabalho mecânico e sistematizada em redes sociotécnicas (conceito de Thomas P. Hughes).
+          </aside>
+        </section>
 
-        let currentSet = null;
-        let currentActiveQuestions = [];
-        let currentIdentity = "";
-        let currentRealName = "";
-        let currentActivityCode = "";
-        
-        let score = 0;
-        let aura = 50;
-        let maxAura = 100;
-        let combo = 1;
-        let missedCountAfterError = 0;
-        let totalAcertos = 0;
-        let maxComboReached = 1;
+        <!-- ================================================================
+             SLIDE 2: OBJETIVOS DE APRENDIZAGEM & ROTEIRO
+             ================================================================ -->
+        <section class="slide" data-module="Abertura & Objetivos" data-index="1">
+          <div>
+            <div class="kicker">Planejamento Didático • 15 Minutos</div>
+            <h2 class="slide-title">Objetivos de Aprendizagem e Arquitetura da Aula</h2>
+            <p class="body-text">Ao concluir este percurso de quatro módulos, o estudante de Ensino Superior deverá ser capaz de:</p>
+          </div>
+          <div class="grid-2-equal" style="margin-top: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div class="concept-strip">
+                <strong>1. Epistemologia Experimental (Módulo I):</strong> Distinguir os modelos de fluido elétrico do século XVIII e explicar o papel da Garrafa de Leiden e da Pilha de Volta na transição da eletrostática para a eletrodinâmica.
+              </div>
+              <div class="concept-strip cyan">
+                <strong>2. Unificação Eletromagnética (Módulo II):</strong> Analisar como os experimentos de Ørsted, Faraday e Hertz transformaram a indução eletromagnética na base dos geradores, motores e telecomunicações.
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div class="concept-strip">
+                <strong>3. Sistemas Sociotécnicos (Módulo III):</strong> Avaliar os fundamentos físicos ($P = R \cdot I^2$) e econômicos da Guerra das Correntes entre Edison (CC) e Tesla/Westinghouse (CA polifásica).
+              </div>
+              <div class="concept-strip cyan">
+                <strong>4. Escala e Estado Sólido (Módulo IV):</strong> Compreender o salto das grandes usinas hidrelétricas (Niágara, Itaipu) à miniaturização eletrônica inaugurada pelo transistor de 1947.
+              </div>
+            </div>
+          </div>
+          <p class="body-text" style="font-size: 0.85rem; color: var(--text-muted);">
+            <strong>Dinâmica de Avaliação:</strong> Cada módulo encerra-se com uma trilha obrigatória de 3 questões (Conhecimento, Interpretação e Desafio) com placar acumulado em tempo real.
+          </p>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Alinhe com a turma que o foco não é apenas biográfico, mas a evolução dos artefatos tecnológicos e das restrições físicas que moldaram cada ruptura histórica.
+          </aside>
+        </section>
 
-        function goToScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            if(screenId === 'screen-game') {
-                initGameSession();
-            } else if(screenId === 'screen-prof-dashboard') {
-                renderProfessorDashboard();
-            }
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 3: INTRODUÇÃO VISUAL AO ASSUNTO
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1: Eletrostática & Pilha" data-index="2">
+          <div>
+            <div class="kicker">Módulo 1 • Dos Fenômenos de Atrito à Corrente Contínua</div>
+            <h2 class="slide-title">1.1 Da Âmbar-Eletricidade às Máquinas Eletrostáticas</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Embora Tales de Mileto (c. 600 a.C.) tenha observado a atração de corpos leves pelo âmbar atritado (<em>ēlektron</em>), foi apenas em <strong>1600</strong>, com <em>De Magnete</em> de <strong>William Gilbert</strong>, que o termo <em>electricus</em> ganhou rigor experimental, separando fenômenos magnéticos de elétricos.
+              </p>
+              <p class="body-text" style="margin-top: 12px;">
+                Em <strong>1663</strong>, o físico alemão <strong>Otto von Guericke</strong> construiu o primeiro gerador eletrostático: uma esfera de enxofre giratória friccionada manualmente, capaz de produzir faíscas audíveis e repulsão eletrostática visível.
+              </p>
+              <div class="concept-strip" style="margin-top: 14px;">
+                <strong>Limitação Técnica Inicial:</strong> As máquinas de fricção geravam tensões elevadíssimas (dezenas de quilovolts), mas com carga baixíssima e descarga instantânea — impossíveis de manter um fluxo contínuo.
+              </div>
+            </div>
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Guericke-electricaldevice.PNG?width=800" alt="Gerador eletrostático de esfera de enxofre de Otto von Guericke" />
+              <figcaption class="media-caption">
+                <span>Gravura histórica do gerador eletrostático de Otto von Guericke (c. 1672). Domínio Público / Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Destaque a diferença entre tensão elevada com baixa carga (eletrostática) e fluxo sustentado de portadores de carga (eletrodinâmica).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 4: EXPLICAÇÃO CONCEITUAL APROFUNDADA
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1: Eletrostática & Pilha" data-index="3">
+          <div>
+            <div class="kicker">Módulo 1 • Conceitos Fundamentais</div>
+            <h2 class="slide-title">1.2 Dois Fluidos vs. Fluido Único e o Armazenamento de Carga</h2>
+          </div>
+          <div class="grid-2-equal">
+            <div>
+              <p class="body-text">
+                Na década de 1730, <strong>Stephen Gray</strong> demonstrou a condução elétrica à distância, dividindo os materiais entre <em>condutores</em> e <em>isolantes</em>. Em 1733, <strong>Charles Du Fay</strong> propôs a teoria dos <strong>dois fluidos</strong> ("vítreo" e "resinoso"), explicando atração e repulsão.
+              </p>
+              <p class="body-text" style="margin-top: 10px;">
+                Em <strong>1747</strong>, <strong>Benjamin Franklin</strong> formulou o modelo do <strong>fluido único</strong> e introduziu a conservação da carga elétrica: um corpo com excesso de fluido foi chamado de <strong>positivo (+)</strong> e um corpo com déficit, de <strong>negativo (−)</strong>.
+              </p>
+              <div class="concept-strip cyan" style="margin-top: 12px;">
+                <strong>Legado da Convenção:</strong> Franklin arbitrou o sentido positivo do fluxo antes da descoberta do elétron (J.J. Thomson, 1897). Por isso, a corrente convencional ainda é desenhada em sentido oposto ao movimento real dos elétrons nos metais.
+              </div>
+            </div>
+            <div>
+              <h3 style="font-size: 1.05rem; color: var(--accent-amber); margin-bottom: 10px;">Comparação de Modelos Epistemológicos (Séc. XVIII)</h3>
+              <ul class="data-list">
+                <li><strong>Teoria de Du Fay (1733):</strong> Dois fluidos imponderáveis distintos; fluidos iguais se repelem, opostos se atraem.</li>
+                <li><strong>Teoria de Franklin (1747):</strong> Um único fluido elétrico universal; eletrização é transferência líquida sem criação ou destruição de carga.</li>
+                <li><strong>Lei de Coulomb (1785):</strong> Quantificação matemática via balança de torção: $F = k_e \frac{|q_1 q_2|}{r^2}$, alinhando a eletricidade à mecânica newtoniana.</li>
+                <li><strong>Distinção Fato vs. Hipótese:</strong> A conservação da carga é lei comprovada; o "fluido imponderável" era um modelo heurístico superado pela física atômica.</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Enfatize como a Balança de Torção de Coulomb (1785) transformou a eletricidade de filosofia natural qualitativa em física matemática.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 5: EXEMPLOS ILUSTRADOS & INTERATIVIDADE (HOTSPOTS)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1: Eletrostática & Pilha" data-index="4">
+          <div>
+            <div class="kicker">Módulo 1 • Artefato Histórico Interativo</div>
+            <h2 class="slide-title">1.3 A Garrafa de Leiden (1745–1746): O Primeiro Capacitor</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <div class="hotspot-stage">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Leyden_unit_jar.png?width=800" alt="Diagrama técnico de Garrafa de Leiden" style="object-fit: contain; background: #0d131f; padding: 14px;" />
+                <button class="hotspot-pin active" style="top: 22%; left: 50%;" onclick="showHotspot('m1', 0, this)">1</button>
+                <button class="hotspot-pin" style="top: 56%; left: 38%;" onclick="showHotspot('m1', 1, this)">2</button>
+                <button class="hotspot-pin" style="top: 66%; left: 62%;" onclick="showHotspot('m1', 2, this)">3</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 6px;">
+                Clique nos marcadores numerados (1, 2, 3) para inspecionar a arquitetura do capacitor histórico. Ilustração: Wikimedia Commons (Domínio Público).
+              </p>
+            </div>
+            <div>
+              <p class="body-text" style="margin-bottom: 14px;">
+                Inventada independentemente por <strong>Ewald Georg von Kleist</strong> (1745) e <strong>Pieter van Musschenbroek</strong> em Leiden (1746), permitiu acumular carga eletrostática suficiente para choques severos e demonstrações públicas em toda a Europa.
+              </p>
+              <div id="hotspot-m1" class="hotspot-readout">
+                <strong style="color: var(--accent-amber); margin-bottom: 6px;">1. Haste Condutora e Esfera Terminal</strong>
+                <p class="body-text">Recebe cargas de um gerador eletrostático externo e as conduz até a armadura metálica interna (ou água acidulada nas versões originais).</p>
+              </div>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Peça a um aluno para clicar nos 3 pontos da Garrafa de Leiden e relacionar sua estrutura com a definição moderna de capacitância ($C = \varepsilon A / d$).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 6: FOTOGRAFIAS REAIS & DEBATE GALVANI VS VOLTA
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1: Eletrostática & Pilha" data-index="5">
+          <div>
+            <div class="kicker">Módulo 1 • Controvérsia Científica</div>
+            <h2 class="slide-title">1.4 Eletricidade Animal vs. Contato Metálico: Galvani e Volta</h2>
+          </div>
+          <div class="grid-2-equal">
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Galvani-frogs-legs-electricity.jpg?width=800" alt="Experimento de Luigi Galvani com pernas de rã (1791)" />
+              <figcaption class="media-caption">
+                <span>Experimento de Luigi Galvani (1791): contração muscular sob arco bimetálico. Wikimedia Commons (PD).</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pila_di_Volta_presso_il_Tempio_Voltiano_a_Como.jpg?width=800" alt="Pilha de Volta original no Tempio Voltiano em Como, Itália" />
+              <figcaption class="media-caption">
+                <span>Pilha de Volta preservada no Tempio Voltiano, Como (Itália). Foto: Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <p class="body-text" style="margin-top: 12px;">
+            <strong>Galvani (1791)</strong> atribuiu os espasmos da rã a uma "eletricidade animal" intrínseca aos tecidos. <strong>Alessandro Volta (1800)</strong> demonstrou que o tecido biológico atuava apenas como eletrólito e detector, criando a <strong>Pilha Voltaica</strong> (discos alternados de cobre/prata e zinco separados por feltro embebido em salmoura) — a <strong>primeira fonte de corrente contínua estacionária</strong> da história.
+          </p>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Ressalte que ambos estavam parcialmente certos: Volta fundou a eletroquímica e a eletrodinâmica; Galvani lançou as bases da eletrofisiologia (potenciais de ação bioelétricos).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 7: APLICAÇÕES PRÁTICAS, CURIOSIDADES & SÍNTESE
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1: Eletrostática & Pilha" data-index="6">
+          <div>
+            <div class="kicker">Módulo 1 • Impacto Imediato & Síntese</div>
+            <h2 class="slide-title">1.5 Revolução Eletroquímica, Curiosidade e Síntese do Módulo 1</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <h3 style="font-size: 1.05rem; color: var(--accent-cyan); margin-bottom: 8px;">Aplicações Científicas Imediatas (1800–1810)</h3>
+              <ul class="data-list">
+                <li><strong>Eletrólise da Água (1800):</strong> Semanas após a carta de Volta à <em>Royal Society</em>, William Nicholson e Anthony Carlisle decompuseram água em $H_2$ e $O_2$.</li>
+                <li><strong>Descoberta de Novos Elementos:</strong> Humphry Davy usou baterias gigantescas na Royal Institution para isolar sódio, potássio, cálcio e magnésio (1807–1808).</li>
+                <li><strong>Arco Elétrico:</strong> Davy demonstrou em 1808 a primeira iluminação elétrica intensa entre eletrodos de carvão.</li>
+              </ul>
+              <div style="margin-top: 14px;">
+                <button class="reveal-btn" onclick="toggleReveal('curiosity-m1')">Desbloquear Curiosidade Histórica: O Para-raios de Franklin</button>
+                <div id="curiosity-m1" class="reveal-box">
+                  <strong>Fato vs. Mito (1752):</strong> Embora a gravura romântica mostre um raio atingindo a pipa de Franklin, se um raio direto tivesse atingido o fio úmido, Franklin teria morrido eletrocutado — como ocorreu com o físico Georg Wilhelm Richmann em São Petersburgo em 1753 ao replicar o experimento sem aterramento adequado. Franklin apenas coletou carga eletrostática ambiente das nuvens de tempestade.
+                </div>
+              </div>
+            </div>
+            <div class="sim-panel">
+              <strong style="color: var(--accent-amber); display: block; margin-bottom: 10px;">Síntese do Módulo 1</strong>
+              <ul class="data-list">
+                <li><strong>Eletrostática (1600–1785):</strong> Estudo de cargas em repouso, geração por atrito (Guericke), conservação de carga (Franklin) e quantificação pela Lei de Coulomb.</li>
+                <li><strong>Armazenamento (1745):</strong> A Garrafa de Leiden inaugura a capacitação energética em escala de laboratório.</li>
+                <li><strong>Eletrodinâmica (1800):</strong> A Pilha de Volta substitui descargas pulsadas por corrente elétrica contínua, viabilizando a química moderna e o eletromagnetismo.</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Abra a curiosidade sobre Richmann (1753) para reforçar o critério científico de diferenciar evidência histórica de iconografia romantizada.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 8: QUIZ 1 (CONHECIMENTO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1 • Quiz" data-index="7">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 1 • Quiz 1 de 3 — Conhecimento</span>
+              <h2 class="slide-title">Ruptura da Eletrostática para a Eletrodinâmica</h2>
+              <p class="quiz-question">
+                Qual foi a principal inovação tecnológica introduzida pela Pilha de Alessandro Volta (1800) em comparação com as máquinas eletrostáticas de atrito e a Garrafa de Leiden?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m1-1">
+              <button class="quiz-opt" onclick="selectOpt('m1-1', 0, this)"><span class="opt-letter">A</span><span>Produziu tensões alternadas de alta frequência capazes de alimentar motores sem escovas.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m1-1', 1, this)"><span class="opt-letter">B</span><span>Forneceu um fluxo contínuo e estável de corrente elétrica por conversão química, superando as descargas instantâneas.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m1-1', 2, this)"><span class="opt-letter">C</span><span>Comprovou a existência da "eletricidade animal" intrínseca aos nervos humanos sem necessidade de metais.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m1-1', 3, this)"><span class="opt-letter">D</span><span>Eliminou a resistência elétrica dos condutores metálicos à temperatura ambiente.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m1-1" disabled onclick="submitQuiz('m1-1', 1, 'Correto! Enquanto geradores de atrito e garrafas de Leiden entregavam pulsos rápidos de alta tensão e baixa carga, a Pilha de Volta manteve uma diferença de potencial contínua por reação eletroquímica, inaugurando a eletrodinâmica.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m1-1"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 9: QUIZ 2 (INTERPRETAÇÃO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1 • Quiz" data-index="8">
+          <div class="quiz-layout with-media">
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Galvani_frog_legs_experiment_setup.png?width=800" alt="Aparato experimental de Luigi Galvani (1791)" />
+              <figcaption class="media-caption">
+                <span>Prancha de <em>De viribus electricitatis</em> (Luigi Galvani, 1791). Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+            <div>
+              <span class="quiz-badge">Módulo 1 • Quiz 2 de 3 — Interpretação</span>
+              <h2 class="slide-title">Análise Experimental do Debate Galvani–Volta</h2>
+              <p class="quiz-question">
+                Observando o aparato experimental de Luigi Galvani (1791) ao lado, no qual a contração da perna da rã ocorria quando dois metais distintos (como cobre e ferro) fechavam o circuito entre o nervo e o músculo, como Alessandro Volta reinterpretou esse fenômeno?
+              </p>
+              <div class="quiz-options" id="q-m1-2">
+                <button class="quiz-opt" onclick="selectOpt('m1-2', 0, this)"><span class="opt-letter">A</span><span>Concluiu que o vidro do recipiente gerava ondas eletromagnéticas que excitavam o nervo à distância.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m1-2', 1, this)"><span class="opt-letter">B</span><span>Demonstrou que a rã não passava de um isolante térmico que impedia a dissipação do calor metálico.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m1-2', 2, this)"><span class="opt-letter">C</span><span>Identificou que o desequilíbrio elétrico surgia do contato entre metais diferentes separados por um condutor úmido (eletrólito).</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m1-2', 3, this)"><span class="opt-letter">D</span><span>Provou que apenas tecidos animais vivos são capazes de conduzir cargas negativas.</span></button>
+              </div>
+              <div class="quiz-actions">
+                <button class="btn-primary" id="btn-m1-2" disabled onclick="submitQuiz('m1-2', 2, 'Exato! Volta percebeu que a força eletromotriz residia na junção bimetálica mediada por uma solução eletrolítica (os fluidos da rã), substituindo o tecido animal por discos de papelão com salmoura.')">Confirmar Resposta</button>
+                <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+              </div>
+              <div class="quiz-feedback" id="fb-m1-2"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 1 — SLIDE 10: QUIZ 3 (DESAFIO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 1 • Quiz" data-index="9">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 1 • Quiz 3 de 3 — Desafio</span>
+              <h2 class="slide-title">Convenção de Franklin e Física do Estado Sólido</h2>
+              <p class="quiz-question">
+                Em 1747, Benjamin Franklin definiu arbitrariamente que o vidro atritado com seda adquiria excesso de "fluido elétrico" (carga positiva). Mais de 150 anos depois, descobriu-se que a condução em fios metálicos ocorre pelo deslocamento de elétrons (carga negativa). Qual é a consequência analítica correta dessa escolha histórica na engenharia elétrica atual?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m1-3">
+              <button class="quiz-opt" onclick="selectOpt('m1-3', 0, this)"><span class="opt-letter">A</span><span>A Lei de Coulomb ($F = k_e |q_1 q_2|/r^2$) precisa inverter seu sinal matemático para calcular forças entre cargas opostas.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m1-3', 1, this)"><span class="opt-letter">B</span><span>Nos circuitos metálicos, o sentido da corrente convencional (do polo + para o −) é oposto ao movimento físico real dos elétrons, mas permanece matematicamente consistente nas leis de Kirchhoff.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m1-3', 2, this)"><span class="opt-letter">C</span><span>A potência dissipada por efeito Joule ($P = R I^2$) torna-se negativa quando se utiliza o sentido real dos elétrons.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m1-3', 3, this)"><span class="opt-letter">D</span><span>Baterias eletroquímicas só funcionam porque íons positivos jamais se movem no interior do eletrólito.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m1-3" disabled onclick="submitQuiz('m1-3', 1, 'Perfeito! Como a carga do elétron é negativa, o transporte líquido de carga positiva num sentido equivale fisicamente ao movimento de elétrons no sentido contrário, mantendo intactas as leis de circuitos.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Avançar ao Módulo 2 →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m1-3"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 11: INTRODUÇÃO VISUAL AO ASSUNTO
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2: Unificação Eletromagnética" data-index="10">
+          <div>
+            <div class="kicker">Módulo 2 • 1820–1888: A Síntese que Moveu o Mundo</div>
+            <h2 class="slide-title">2.1 A Conexão Inesperada: Ørsted, Ampère e o Eletromagnetismo</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Até 1820, eletricidade e magnetismo eram tratados como forças independentes. Durante uma aula em Copenhague, <strong>Hans Christian Ørsted</strong> observou que a agulha de uma bússola sofria deflexão perpendicular sempre que uma corrente elétrica percorria um fio próximo.
+              </p>
+              <p class="body-text" style="margin-top: 12px;">
+                Semanas depois, em Paris, <strong>André-Marie Ampère</strong> formulou a eletrodinâmica matemática, demonstrando que dois condutores paralelos percorrendo correntes atraem-se (mesmo sentido) ou repelem-se (sentidos opostos), dispensando ímãs permanentes.
+              </p>
+              <div class="concept-strip cyan" style="margin-top: 14px;">
+                <strong>Virada de Chave:</strong> Pela primeira vez, energia química (bateria) convertia-se diretamente em movimento mecânico rotacional (motor primitivo de Faraday, 1821).
+              </div>
+            </div>
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Straight-wire-magnetic-field-compass-needles.jpg?width=800" alt="Demonstração do experimento de Ørsted: agulhas de bússola alinhadas circularmente ao redor de um fio condutor" />
+              <figcaption class="media-caption">
+                <span>Configuração circular de bússolas evidenciando o campo magnético ao redor de um condutor retilíneo (efeito Ørsted). Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Destaque o caráter tangencial/circular do campo magnético ao redor do fio — uma ruptura com as forças exclusivamente centrais da física newtoniana.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 12: EXPLICAÇÃO CONCEITUAL APROFUNDADA
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2: Unificação Eletromagnética" data-index="11">
+          <div>
+            <div class="kicker">Módulo 2 • Indução Eletromagnética e Teoria de Campo</div>
+            <h2 class="slide-title">2.2 Michael Faraday (1831) e as Equações de Maxwell (1865)</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Se a eletricidade gerava magnetismo, seria possível o inverso? Em <strong>1831</strong>, <strong>Michael Faraday</strong> descobriu que um campo magnético <em>estático</em> não gera corrente, mas a <strong>variação temporal do fluxo magnético ($\frac{d\Phi_B}{dt}$)</strong> induz uma força eletromotriz em um circuito fechado:
+              </p>
+              <div class="concept-strip" style="font-family: var(--font-mono); font-size: 1.05rem; color: #ffffff;">
+                Lei de Faraday-Lenz: &nbsp; $\mathcal{E} = -\frac{d\Phi_B}{dt}$
+              </div>
+              <p class="body-text">
+                Faraday introduziu o conceito revolucionário de <strong>linhas de força (campos)</strong> permeando o espaço. Em <strong>1865</strong>, <strong>James Clerk Maxwell</strong> traduziu a intuição geométrica de Faraday em quatro equações diferenciais parciais, prevendo a existência de <strong>ondas eletromagnéticas</strong> propagando-se à velocidade da luz ($c \approx 3 \times 10^8\text{ m/s}$).
+              </p>
+            </div>
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Induction_experiment.png?width=800" alt="Desenho do experimento de indução eletromagnética de Michael Faraday" />
+              <figcaption class="media-caption">
+                <span>Experimento de indução mútua de Michael Faraday (1831): variação de corrente na bobina primária induz pulso no galvanômetro. Wikimedia Commons (PD).</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Enfatize que o sinal negativo (Lei de Lenz, 1834) expressa a conservação da energia: a corrente induzida se opõe à variação do fluxo que a originou.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 13: EXEMPLOS ILUSTRADOS & INTERATIVIDADE (LINHA DO TEMPO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2: Unificação Eletromagnética" data-index="12">
+          <div>
+            <div class="kicker">Módulo 2 • Cronologia Explorável (1820–1888)</div>
+            <h2 class="slide-title">2.3 Da Bancada ao Gerador Industrial e às Ondas de Rádio</h2>
+          </div>
+          <div class="timeline-tabs" id="tl-m2-tabs">
+            <button class="t-tab active" onclick="selectTimeline('m2', 0, this)">1831 • Disco de Faraday</button>
+            <button class="t-tab" onclick="selectTimeline('m2', 1, this)">1837 • Telégrafo Elétrico</button>
+            <button class="t-tab" onclick="selectTimeline('m2', 2, this)">1871 • Dínamo de Gramme</button>
+            <button class="t-tab" onclick="selectTimeline('m2', 3, this)">1887 • Ondas de Hertz</button>
+          </div>
+          <div class="grid-2" id="tl-m2-content">
+            <div>
+              <h3 style="font-size: 1.2rem; color: var(--accent-amber); margin-bottom: 10px;">1831: O Primeiro Gerador Eletromagnético (Disco Homopolar)</h3>
+              <p class="body-text">
+                Michael Faraday girou um disco de cobre entre os polos de um ímã em ferradura. O movimento mecânico contínuo cortava as linhas de fluxo magnético, gerando uma corrente contínua constante entre o eixo e a borda do disco.
+              </p>
+              <div class="concept-strip cyan" style="margin-top: 12px;">
+                <strong>Significado Econômico:</strong> Pela primeira vez na história, tornou-se possível gerar eletricidade a partir de máquinas a vapor ou quedas d'água, libertando a humanidade do alto custo do zinco das pilhas químicas.
+              </div>
+            </div>
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Faraday_disk_generator.jpg?width=800" alt="Disco gerador de Faraday de 1831" />
+              <figcaption class="media-caption">
+                <span>Diagrama do Disco de Faraday (1831), primeiro gerador eletromagnético. Wikimedia Commons (PD).</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Navegue pelas 4 abas da linha do tempo (especialmente 1871 Gramme e 1887 Hertz) para mostrar como teoria pura (Maxwell) virou tecnologia de comunicação (Hertz/Marconi).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 14: FOTOGRAFIA HISTÓRICA DE HERTZ & TELECOMUNICAÇÕES
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2: Unificação Eletromagnética" data-index="13">
+          <div>
+            <div class="kicker">Módulo 2 • Comprovação Experimental de Maxwell</div>
+            <h2 class="slide-title">2.4 Heinrich Hertz (1887–1888): A Primeira Antena Parabólica</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Durante duas décadas, as ondas eletromagnéticas de Maxwell foram vistas por muitos físicos continentais como abstração matemática. Entre <strong>1887 e 1888</strong>, em Karlsruhe, <strong>Heinrich Hertz</strong> construiu um oscilador de centelha (dipolo) acoplado a um refletor parabólico de zinco operando em ~450 MHz.
+              </p>
+              <ul class="data-list" style="margin-top: 12px;">
+                <li><strong>Detecção sem Fios:</strong> Uma espira receptora do outro lado do laboratório produzia microcentelhas sincronizadas com o transmissor.</li>
+                <li><strong>Propriedades Ópticas:</strong> Hertz demonstrou reflexão, refração, polarização e ondas estacionárias, provando que luz e ondas de rádio são o mesmo fenômeno físico em frequências distintas.</li>
+              </ul>
+              <button class="reveal-btn" style="margin-top: 14px;" onclick="toggleReveal('curiosity-m2')">Desbloquear Curiosidade: O Ceticismo de Hertz</button>
+              <div id="curiosity-m2" class="reveal-box">
+                <strong>Citação Autêntica:</strong> Ao ser questionado por alunos sobre a utilidade prática de suas ondas invisíveis, Hertz respondeu: <em>"Não tem utilidade alguma. É apenas um experimento que prova que o Mestre Maxwell estava certo."</em> Menos de dez anos depois, Guglielmo Marconi e Roberto Landell de Moura patenteavam a radiotelegrafia transoceânica.
+              </div>
+            </div>
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hertz_spark_gap_transmitter_and_parabolic_antenna.png?width=800" alt="Transmissor de centelha e antena parabólica de Heinrich Hertz (1888)" />
+              <figcaption class="media-caption">
+                <span>Transmissor dipolo com refletor parabólico de Heinrich Hertz (1888), extraído de <em>Electric Waves</em> (1893). Wikimedia Commons (PD).</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Destaque o papel da pesquisa básica: Hertz não buscava inventar o rádio, mas testar uma previsão fundamental das equações de Maxwell.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 15: APLICAÇÕES PRÁTICAS, ATIVIDADE DE ASSOCIAÇÃO & SÍNTESE
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2: Unificação Eletromagnética" data-index="14">
+          <div>
+            <div class="kicker">Módulo 2 • Exercício de Associação & Síntese</div>
+            <h2 class="slide-title">2.5 Conectando Princípios Físicos aos Artefatos Tecnológicos</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text" style="margin-bottom: 10px;">
+                <strong>Atividade Rápida (Clique para associar):</strong> Selecione um princípio físico à esquerda e clique no artefato correspondente à direita.
+              </p>
+              <div class="match-grid" id="match-m2">
+                <div class="match-col">
+                  <button class="match-item" data-pair="A" onclick="handleMatch('m2', 'left', this)">1. Deflexão magnética por corrente (Ørsted, 1820)</button>
+                  <button class="match-item" data-pair="B" onclick="handleMatch('m2', 'left', this)">2. Variação de fluxo magnético ($\mathcal{E} = -d\Phi_B/dt$)</button>
+                  <button class="match-item" data-pair="C" onclick="handleMatch('m2', 'left', this)">3. Propagação transversal de campos $\vec{E}$ e $\vec{B}$ no vácuo</button>
+                </div>
+                <div class="match-col">
+                  <button class="match-item" data-pair="B" onclick="handleMatch('m2', 'right', this)">Transformadores e Geradores Rotativos</button>
+                  <button class="match-item" data-pair="C" onclick="handleMatch('m2', 'right', this)">Radiocomunicação e Antenas Dipolo (Hertz)</button>
+                  <button class="match-item" data-pair="A" onclick="handleMatch('m2', 'right', this)">Galvanômetros e Telégrafo Eletromagnético</button>
+                </div>
+              </div>
+              <p id="match-m2-status" style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-cyan); font-weight: 600;">Pares resolvidos: 0 / 3</p>
+            </div>
+            <div class="sim-panel">
+              <strong style="color: var(--accent-amber); display: block; margin-bottom: 10px;">Síntese do Módulo 2</strong>
+              <ul class="data-list">
+                <li><strong>Reciprocidade Eletromagnética:</strong> Ørsted (1820) mostrou que corrente cria campo magnético; Faraday (1831) provou que fluxo magnético variável induz corrente.</li>
+                <li><strong>Conversão Eletromecânica:</strong> Dínamos e motores acoplaram a termodinâmica (turbinas a vapor/hidráulicas) à geração elétrica em larga escala.</li>
+                <li><strong>Unificação de Maxwell (1865):</strong> Eletricidade, magnetismo e óptica unificam-se sob a teoria de campos, comprovada por Hertz em 1887–1888.</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Resolva a associação em conjunto com a sala em 45 segundos para consolidar a relação causa-efeito antes do Quiz 2.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 16: QUIZ 1 (CONHECIMENTO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2 • Quiz" data-index="15">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 2 • Quiz 1 de 3 — Conhecimento</span>
+              <h2 class="slide-title">Condição Necessária para a Indução Eletromagnética</h2>
+              <p class="quiz-question">
+                De acordo com a descoberta experimental de Michael Faraday em 1831, sob qual condição um campo magnético gera corrente elétrica em uma espira condutora fechada?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m2-1">
+              <button class="quiz-opt" onclick="selectOpt('m2-1', 0, this)"><span class="opt-letter">A</span><span>Sempre que um ímã permanente de alta intensidade permanece rigorosamente imóvel no interior da bobina.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m2-1', 1, this)"><span class="opt-letter">B</span><span>Apenas quando a espira é fabricada com material ferromagnético resfriado abaixo de zero grau.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m2-1', 2, this)"><span class="opt-letter">C</span><span>Quando ocorre variação temporal do fluxo magnético através da área delimitada pelo circuito ($\frac{d\Phi_B}{dt} \neq 0$).</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m2-1', 3, this)"><span class="opt-letter">D</span><span>Exclusivamente quando o circuito é alimentado simultaneamente por uma pilha voltaica de zinco e prata.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m2-1" disabled onclick="submitQuiz('m2-1', 2, 'Correto! Um campo magnético estático não realiza trabalho sobre cargas em repouso na espira; é a variação do fluxo magnético (por movimento relativo ou variação de corrente) que induz a força eletromotriz.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m2-1"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 17: QUIZ 2 (INTERPRETAÇÃO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2 • Quiz" data-index="16">
+          <div class="quiz-layout with-media">
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Induction_experiment.png?width=800" alt="Bobinas de indução mútua de Faraday" />
+              <figcaption class="media-caption">
+                <span>Indução entre duas bobinas enroladas em anel/núcleo (Faraday, 1831). Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+            <div>
+              <span class="quiz-badge">Módulo 2 • Quiz 2 de 3 — Interpretação</span>
+              <h2 class="slide-title">Comportamento Transitório no Anel de Faraday</h2>
+              <p class="quiz-question">
+                No experimento ilustrado ao lado, ao fechar a chave da bateria na bobina primária, o ponteiro do galvanômetro ligado à bobina secundária deflete bruscamente e logo retorna a zero, mesmo com a bateria ainda conectada. Como esse comportamento fundamenta o funcionamento dos transformadores modernos?
+              </p>
+              <div class="quiz-options" id="q-m2-2">
+                <button class="quiz-opt" onclick="selectOpt('m2-2', 0, this)"><span class="opt-letter">A</span><span>Transformadores operam exclusivamente com corrente contínua constante, pois o núcleo de ferro amplifica campos estáticos.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m2-2', 1, this)"><span class="opt-letter">B</span><span>O galvanômetro retorna a zero porque o fio secundário perde sua condutividade após o primeiro pulso.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m2-2', 2, this)"><span class="opt-letter">C</span><span>A deflexão ocorre apenas nos instantes de variação da corrente (ligar/desligar); por isso, transformadores exigem corrente alternada (CA) para manter variação contínua de fluxo.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m2-2', 3, this)"><span class="opt-letter">D</span><span>O fenômeno prova que cargas elétricas saltam fisicamente pelo ar entre o primário e o secundário.</span></button>
+              </div>
+              <div class="quiz-actions">
+                <button class="btn-primary" id="btn-m2-2" disabled onclick="submitQuiz('m2-2', 2, 'Excelente interpretação! Na corrente contínua estacionária, dΦ/dt = 0 após o transitório inicial. A corrente alternada inverte continuamente o fluxo magnético, permitindo a elevação e redução eficiente de tensão em transformadores.')">Confirmar Resposta</button>
+                <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+              </div>
+              <div class="quiz-feedback" id="fb-m2-2"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 2 — SLIDE 18: QUIZ 3 (DESAFIO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 2 • Quiz" data-index="17">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 2 • Quiz 3 de 3 — Desafio</span>
+              <h2 class="slide-title">Do Motor de Dínamo à Transição Energética do Século XIX</h2>
+              <p class="quiz-question">
+                Antes do aperfeiçoamento dos geradores eletromagnéticos (como o dínamo de Zénobe Gramme em 1871), a eletricidade era produzida majoritariamente por pilhas químicas que consumiam zinco metálico. Por que a invenção de geradores rotativos foi condição indispensável para a eletrificação urbana e industrial?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m2-3">
+              <button class="quiz-opt" onclick="selectOpt('m2-3', 0, this)"><span class="opt-letter">A</span><span>Porque o custo energético de refinar zinco para pilhas químicas era dezenas de vezes superior ao da queima de carvão ou aproveitamento hidráulico em turbinas mecânicas.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m2-3', 1, this)"><span class="opt-letter">B</span><span>Porque as pilhas químicas produziam apenas corrente alternada de alta tensão, incompatível com lâmpadas incandescentes.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m2-3', 2, this)"><span class="opt-letter">C</span><span>Porque os geradores eletromagnéticos violam a conservação da energia, criando potência elétrica sem necessidade de combustível ou queda d'água.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m2-3', 3, this)"><span class="opt-letter">D</span><span>Porque as leis de Maxwell proibiam a ligação de mais de duas baterias químicas em série.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m2-3" disabled onclick="submitQuiz('m2-3', 0, 'Análise precisa! O zinco metálico já exigia grande energia térmica para sua metalurgia, tornando a bateria inviável para iluminação pública ou força motriz pesada. O gerador acoplou a eletricidade às fontes primárias abundantes (carvão e hidrelétricas).')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Avançar ao Módulo 3 →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m2-3"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 19: INTRODUÇÃO VISUAL AO ASSUNTO
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3: Sistemas & Guerra das Correntes" data-index="18">
+          <div>
+            <div class="kicker">Módulo 3 • 1879–1896: O Nascimento das Redes Elétricas</div>
+            <h2 class="slide-title">3.1 Thomas Edison e o Sistema Integrado de Pearl Street (1882)</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                A genialidade histórica de <strong>Thomas Alva Edison</strong> não residiu em inventar a primeira lâmpada incandescente (precursores como Humphry Davy, Warren de la Rue e Joseph Swan já existiam), mas em projetar um <strong>sistema sociotécnico completo</strong> em 1879–1882:
+              </p>
+              <ul class="data-list" style="margin-top: 10px;">
+                <li><strong>Filamento de Alta Resistência:</strong> Carbono bambu carbonizado em alto vácuo, permitindo ligação em <em>paralelo</em> (cada lâmpada independente) e reduzindo a corrente necessária nos cabos de cobre.</li>
+                <li><strong>Estação Central de Pearl Street (4 de setembro de 1882):</strong> Primeira usina comercial em Manhattan, operando em <strong>110 V em Corrente Contínua (CC)</strong> com medidores eletroquímicos de consumo e cabos subterrâneos.</li>
+              </ul>
+            </div>
+            <div class="grid-2-equal" style="gap: 12px;">
+              <figure class="media-figure contain" onclick="openLightbox(this)">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Edison_Carbon_Bulb.jpg?width=600" alt="Lâmpada incandescente original de filamento de carbono de Thomas Edison (1879)" />
+                <figcaption class="media-caption">
+                  <span>Lâmpada original de Menlo Park (1879). CC BY 2.0 / Wikimedia Commons.</span>
+                  <span class="zoom-hint">[Zoom]</span>
+                </figcaption>
+              </figure>
+              <figure class="media-figure contain" onclick="openLightbox(this)">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Laying_electric_lines_under_street_Edison_Pearl_Street_Utility_June_21_1882_Harpers_Weekly.png?width=600" alt="Instalação dos cabos subterrâneos de Edison em Nova York (1882)" />
+                <figcaption class="media-caption">
+                  <span>Instalação de condutores subterrâneos de Edison (<em>Harper's Weekly</em>, 1882). PD.</span>
+                  <span class="zoom-hint">[Zoom]</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Ressalte o conceito de <em>engenharia de sistemas</em>: lâmpada de alta resistência + dínamo "Jumbo" + fusíveis + medidores + rede em paralelo.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 20: EXPLICAÇÃO CONCEITUAL & SIMULADOR INTERATIVO
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3: Sistemas & Guerra das Correntes" data-index="19">
+          <div>
+            <div class="kicker">Módulo 3 • O Gargalo Físico da Corrente Contínua</div>
+            <h2 class="slide-title">3.2 A Equação que Decidiu a Guerra: Perdas por Efeito Joule ($P_{\text{perda}} = R I^2$)</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Para transmitir uma potência elétrica $P = V \cdot I$ a longa distância, a corrente na linha é $I = \frac{P}{V}$. Como a perda térmica nos cabos cresce com o <strong>quadrado da corrente</strong>:
+              </p>
+              <div class="concept-strip" style="font-family: var(--font-mono); font-size: 1rem; color: #ffffff;">
+                $P_{\text{perda}} = R_{\text{cabo}} \cdot \left(\frac{P}{V}\right)^2$
+              </div>
+              <p class="body-text">
+                Na década de 1880, não existiam conversores eficientes para elevar a tensão de Corrente Contínua. Para alimentar lâmpadas de 110 V sem que os clientes próximos queimassem seus aparelhos, Edison precisava gerar e transmitir em baixa tensão (~110–220 V), limitando o raio de cada usina a cerca de <strong>1,5 km</strong> ou exigindo toneladas proibitivas de cobre.
+              </p>
+            </div>
+            <div class="sim-panel">
+              <strong style="color: var(--accent-amber);">Simulador de Transmissão: Impacto da Tensão ($V$) nas Perdas</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Ajuste a tensão de transmissão para entregar 100 kW em um cabo de resistência $R = 2\,\Omega$:</p>
+              <div class="sim-controls">
+                <label>
+                  <span>Tensão (V): <strong id="sim-v-val">220 V</strong></span>
+                  <input type="range" id="sim-v" min="110" max="2200" step="110" value="220" oninput="updateJouleSim()" />
+                </label>
+                <label>
+                  <span>Distância / Resistência ($R$): <strong id="sim-r-val">2.0 Ω</strong></span>
+                  <input type="range" id="sim-r" min="1" max="5" step="0.5" value="2" oninput="updateJouleSim()" />
+                </label>
+              </div>
+              <div class="sim-bars">
+                <div class="bar-row">
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span>Corrente na Linha ($I = P/V$):</span>
+                    <strong id="sim-i-out" style="color: var(--accent-cyan);">454.5 A</strong>
+                  </div>
+                </div>
+                <div class="bar-row">
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span>Perda Térmica ($R \cdot I^2$):</span>
+                    <strong id="sim-loss-out" style="color: var(--accent-rose);">413.2 kW (Inviável!)</strong>
+                  </div>
+                  <div class="bar-track">
+                    <div id="sim-loss-bar" class="bar-fill" style="width: 100%; background: var(--accent-rose);"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Aumente o slider de tensão de 110 V para 2.200 V em aula: os alunos visualizam imediatamente a queda de 400x nas perdas térmicas ($20^2 = 400$).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 21: NIKOLA TESLA, WESTINGHOUSE E O SISTEMA POLIFÁSICO
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3: Sistemas & Guerra das Correntes" data-index="20">
+          <div>
+            <div class="kicker">Módulo 3 • A Solução Polifásica em Corrente Alternada</div>
+            <h2 class="slide-title">3.3 Nikola Tesla, George Westinghouse e o Campo Magnético Girante</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Em 1885, <strong>George Westinghouse</strong> adquiriu as patentes europeias do transformador de Gaulard e Gibbs (aperfeiçoado pelos engenheiros húngaros Zipernowsky, Bláthy e Déri), permitindo elevar a tensão para transmissão a dezenas de quilômetros e reduzi-la nas residências.
+              </p>
+              <p class="body-text" style="margin-top: 10px;">
+                Contudo, faltava um motor confiável em CA. Em <strong>1887–1888</strong>, <strong>Nikola Tesla</strong> patenteou o <strong>motor de indução polifásico</strong> (paralelamente às pesquisas de Galileo Ferraris na Itália): correntes defasadas criavam um <strong>campo magnético girante</strong> sem escovas nem comutadores faiscantes.
+              </p>
+              <div class="concept-strip cyan" style="margin-top: 12px;">
+                <strong>Virada Histórica (1893):</strong> Na Exposição Mundial Colombiana de Chicago, Westinghouse e Tesla iluminaram 100.000 lâmpadas com geradores polifásicos por metade do orçamento proposto pela General Electric (Edison).
+              </div>
+            </div>
+            <div class="grid-2-equal" style="gap: 12px;">
+              <figure class="media-figure contain" onclick="openLightbox(this)">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Moteur_%C3%A0_induction.jpg?width=600" alt="Protótipo do motor de indução bifásico de Nikola Tesla (1887-1888)" />
+                <figcaption class="media-caption">
+                  <span>Motor de indução bifásico de Nikola Tesla (1887–1888). CC BY-SA 3.0 / Wikimedia Commons.</span>
+                  <span class="zoom-hint">[Zoom]</span>
+                </figcaption>
+              </figure>
+              <figure class="media-figure contain" onclick="openLightbox(this)">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tesla_polyphase_AC_500hp_generator_at_1893_exposition.jpg?width=600" alt="Gerador polifásico CA de 500 HP de Tesla/Westinghouse na Exposição de Chicago de 1893" />
+                <figcaption class="media-caption">
+                  <span>Gerador polifásico CA de 500 HP na Feira de Chicago (1893). Domínio Público / Wikimedia Commons.</span>
+                  <span class="zoom-hint">[Zoom]</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Corrija um equívoco comum: Tesla não "inventou a corrente alternada" (que já existia desde Faraday/Pixii), mas criou o sistema polifásico completo com motor de indução sem escovas.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 22: COMPARAÇÃO INTERATIVA & CURIOSIDADE
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3: Sistemas & Guerra das Correntes" data-index="21">
+          <div>
+            <div class="kicker">Módulo 3 • Análise Comparativa & Síntese</div>
+            <h2 class="slide-title">3.4 CC vs. CA Polifásica: Cartões de Comparação e Síntese</h2>
+          </div>
+          <div class="grid-3">
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <span class="kicker">Clique para virar</span>
+                  <h3 style="font-size: 1.15rem;">Transformação de Tensão (Séc. XIX)</h3>
+                  <p class="body-text">Por que a CA venceu na transmissão interurbana?</p>
+                  <span style="font-size: 0.8rem; color: var(--accent-cyan);">Ver análise técnica →</span>
+                </div>
+                <div class="flip-back">
+                  <strong style="color: var(--accent-cyan);">Vantagem Decisiva da CA</strong>
+                  <p class="body-text" style="font-size: 0.88rem;">Transformadores eletromagnéticos estáticos (sem partes móveis) elevavam a tensão de 2 kV para 11–33 kV com eficiência >95%, reduzindo perdas $RI^2$ sem eletrônica de potência (que só surgiria no século XX).</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <span class="kicker">Clique para virar</span>
+                  <h3 style="font-size: 1.15rem;">Padrão Trifásico Moderno</h3>
+                  <p class="body-text">Por que as redes hoje usam 3 fases (120°) e não 2 fases?</p>
+                  <span style="font-size: 0.8rem; color: var(--accent-cyan);">Ver análise técnica →</span>
+                </div>
+                <div class="flip-back">
+                  <strong style="color: var(--accent-cyan);">Engenharia Trifásica (Dolivo-Dobrovolsky, 1891)</strong>
+                  <p class="body-text" style="font-size: 0.88rem;">O sistema trifásico equilibrado entrega potência instantânea constante ao eixo dos motores e economiza cerca de 25% de cobre nos condutores em comparação com sistemas monofásicos ou bifásicos equivalentes.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <span class="kicker">Clique para virar</span>
+                  <h3 style="font-size: 1.15rem;">A Revanche Atual da CC (HVDC)</h3>
+                  <p class="body-text">A Corrente Contínua desapareceu das redes?</p>
+                  <span style="font-size: 0.8rem; color: var(--accent-cyan);">Ver análise técnica →</span>
+                </div>
+                <div class="flip-back">
+                  <strong style="color: var(--accent-cyan);">Linhas HVDC (Ex.: Itaipu e Belo Monte)</strong>
+                  <p class="body-text" style="font-size: 0.88rem;">Com tiristores e IGBTs modernos, a Corrente Contínua em Ultra-Alta Tensão (HVDC, ±600 kV a ±800 kV) voltou a ser superior para distâncias >800 km e cabos submarinos, pois elimina perdas reativas/capacitivas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <button class="reveal-btn" onclick="toggleReveal('curiosity-m3')">Curiosidade: A Campanha Midiática de Edison</button>
+            <span style="font-size: 0.84rem; color: var(--text-muted);">Síntese M3: Lâmpada de alta resistência + Transformador + Motor polifásico = Rede elétrica moderna.</span>
+          </div>
+          <div id="curiosity-m3" class="reveal-box">
+            <strong>Propaganda e Tecnologia (1888–1890):</strong> Para desacreditar a corrente alternada de Westinghouse, associados de Thomas Edison (como Harold P. Brown) financiaram demonstrações públicas eletrocutando animais e articularam a adoção da primeira cadeira elétrica no estado de Nova York (1890) usando um gerador Westinghouse, tentando associar o termo "Westinghoused" à morte por eletrocussão.
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Vire os três cartões — especialmente o 3º sobre HVDC no Brasil (linhões de Itaipu e Belo Monte), mostrando que escolhas tecnológicas dependem do estado da arte dos conversores.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 23: QUIZ 1 (CONHECIMENTO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3 • Quiz" data-index="22">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 3 • Quiz 1 de 3 — Conhecimento</span>
+              <h2 class="slide-title">Vantagem Técnica do Sistema de Corrente Alternada</h2>
+              <p class="quiz-question">
+                Na década de 1890, qual propriedade técnica permitiu que a Corrente Alternada (CA) superasse a Corrente Contínua (CC) de Edison na transmissão de energia elétrica entre cidades distantes?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m3-1">
+              <button class="quiz-opt" onclick="selectOpt('m3-1', 0, this)"><span class="opt-letter">A</span><span>A capacidade de elevar e rebaixar facilmente os níveis de tensão por meio de transformadores eletromagnéticos, reduzindo drasticamente as perdas por efeito Joule ($R I^2$).</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m3-1', 1, this)"><span class="opt-letter">B</span><span>O fato de a corrente alternada não sofrer resistência elétrica em condutores de cobre ou alumínio.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m3-1', 2, this)"><span class="opt-letter">C</span><span>A possibilidade de armazenar corrente alternada diretamente em garrafas de Leiden domésticas.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m3-1', 3, this)"><span class="opt-letter">D</span><span>A inexistência de qualquer risco fisiológico de choque elétrico em frequências de 50 Hz ou 60 Hz.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m3-1" disabled onclick="submitQuiz('m3-1', 0, 'Correto! Ao elevar a tensão V por meio de transformadores, a corrente I = P/V cai na mesma proporção e a perda térmica R·I² cai com o quadrado desse fator.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m3-1"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 24: QUIZ 2 (INTERPRETAÇÃO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3 • Quiz" data-index="23">
+          <div class="quiz-layout with-media">
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Moteur_%C3%A0_induction.jpg?width=800" alt="Motor de indução polifásico de Tesla" />
+              <figcaption class="media-caption">
+                <span>Modelo do motor de indução polifásico de Nikola Tesla (Imperial College / Wikimedia Commons).</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+            <div>
+              <span class="quiz-badge">Módulo 3 • Quiz 2 de 3 — Interpretação</span>
+              <h2 class="slide-title">O Elo que Faltava no Sistema Polifásico</h2>
+              <p class="quiz-question">
+                Até 1888, críticos da Corrente Alternada apontavam que ela servia apenas para iluminação, pois não existiam motores práticos em CA para mover fábricas e bondes. Como o motor de indução de Tesla (ao lado) resolveu esse gargalo industrial?
+              </p>
+              <div class="quiz-options" id="q-m3-2">
+                <button class="quiz-opt" onclick="selectOpt('m3-2', 0, this)"><span class="opt-letter">A</span><span>Utilizava pilhas voltaicas internas no rotor para manter o torque constante.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m3-2', 1, this)"><span class="opt-letter">B</span><span>Substituiu os fios de cobre por imãs permanentes de neodímio acionados manualmente.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m3-2', 2, this)"><span class="opt-letter">C</span><span>Empregava correntes alternadas defasadas no estator para criar um campo magnético girante que induzia corrente no rotor sem escovas nem comutadores.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m3-2', 3, this)"><span class="opt-letter">D</span><span>Convertia mecanicamente a corrente alternada em vapor d'água antes de girar o eixo.</span></button>
+              </div>
+              <div class="quiz-actions">
+                <button class="btn-primary" id="btn-m3-2" disabled onclick="submitQuiz('m3-2', 2, 'Exato! O campo magnético girante elimina o desgaste e o faiscamento das escovas/comutadores dos motores CC, tornando o motor de indução robusto, barato e padrão na indústria mundial.')">Confirmar Resposta</button>
+                <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+              </div>
+              <div class="quiz-feedback" id="fb-m3-2"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 3 — SLIDE 25: QUIZ 3 (DESAFIO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 3 • Quiz" data-index="24">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 3 • Quiz 3 de 3 — Desafio</span>
+              <h2 class="slide-title">Análise Quantitativa de Perdas em Linha de Transmissão</h2>
+              <p class="quiz-question">
+                Suponha que uma usina precise transmitir uma potência fixa $P$ através de um cabo de resistência elétrica constante $R$. Se um engenheiro substituir um sistema de transmissão de $110\text{ V}$ por um sistema elevado via transformador para $11.000\text{ V}$ (fator de 100 vezes na tensão), o que ocorre com a potência perdida por aquecimento no cabo?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m3-3">
+              <button class="quiz-opt" onclick="selectOpt('m3-3', 0, this)"><span class="opt-letter">A</span><span>A perda térmica no cabo é reduzida por um fator de $100$ vezes.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m3-3', 1, this)"><span class="opt-letter">B</span><span>A perda térmica no cabo aumenta por um fator de $100$ vezes devido à maior tensão.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m3-3', 2, this)"><span class="opt-letter">C</span><span>A perda térmica no cabo permanece inalterada, pois a potência transmitida $P$ é constante.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m3-3', 3, this)"><span class="opt-letter">D</span><span>A perda térmica no cabo é reduzida por um fator de $10.000$ vezes ($100^2$), viabilizando a transmissão a dezenas de quilômetros com cabos mais finos.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m3-3" disabled onclick="submitQuiz('m3-3', 3, 'Brilhante! Como I = P/V cai 100 vezes e P_perda = R·I², a dissipação cai por 100² = 10.000 vezes. Esse ganho quadrático é o fundamento físico das linhas de alta tensão.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Avançar ao Módulo 4 →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m3-3"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 26: INTRODUÇÃO VISUAL AO ASSUNTO
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4: Escala Global & Estado Sólido" data-index="25">
+          <div>
+            <div class="kicker">Módulo 4 • 1895–Século XXI: Megaescala Energética e Revolução Eletrônica</div>
+            <h2 class="slide-title">4.1 Niagara Falls (1895): O Triunfo da Geração Hidrelétrica Polifásica</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                O desfecho definitivo da Guerra das Correntes ocorreu na <strong>Usina Edward Dean Adams</strong>, em Niagara Falls (1895–1896). Dez geradores bifásicos Westinghouse de 5.000 HP cada, projetados sob as patentes de Nikola Tesla, transmitiram eletricidade em <strong>11.000 V</strong> a 35 km de distância até a cidade industrial de Buffalo, Nova York.
+              </p>
+              <div class="concept-strip" style="margin-top: 14px;">
+                <strong>Mudança de Paradigma Geográfico:</strong> Pela primeira vez, grandes centros industriais puderam ser abastecidos longe da fonte primária de energia, inaugurando as redes elétricas regionais e nacionais.
+              </div>
+              <p class="body-text" style="margin-top: 10px;">
+                No Brasil, esse modelo culminou em obras monumentais como a <strong>Usina Hidrelétrica de Itaipu</strong> (14.000 MW instalados, inaugurada em 1984) e o Sistema Interligado Nacional (SIN), que integra bacias hidrográficas, parques eólicos e solares em escala continental.
+              </p>
+            </div>
+            <figure class="media-figure" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Westinghouse_Generators_at_Niagara_Falls.jpg?width=900" alt="Geradores Westinghouse de 5.000 HP na usina de Niagara Falls (1895-1904)" />
+              <figcaption class="media-caption">
+                <span>Geradores Westinghouse na Usina Edward Dean Adams, Niagara Falls (foto histórica c. 1904). Domínio Público / Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Mostre a escala humana na fotografia histórica de Niágara — geradores verticais acoplados diretamente às turbinas hidráulicas subterrâneas.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 27: FOTOGRAFIAS DE MEGAESTRUTURAS (ITAIPU & TRÊS GARGANTAS)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4: Escala Global & Estado Sólido" data-index="26">
+          <div>
+            <div class="kicker">Módulo 4 • Geografia e Engenharia de Potência</div>
+            <h2 class="slide-title">4.2 Da Bacia do Paraná ao Rio Yangtze: A Escala Continental</h2>
+          </div>
+          <div class="grid-2-equal">
+            <figure class="media-figure" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Itaipu_Dam,_aerial_photograph.jpg?width=900" alt="Fotografia aérea da Usina Hidrelétrica de Itaipu no Rio Paraná" />
+              <figcaption class="media-caption">
+                <span>Usina Hidrelétrica de Itaipu (Brasil/Paraguai, Rio Paraná, 25°24'S 54°35'O). Foto aérea: CC BY 4.0 / Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+            <figure class="media-figure" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Three_Gorges_Dam,_China_-_natural_colours.jpg?width=900" alt="Imagem de satélite NASA da Usina de Três Gargantas no Rio Yangtze, China" />
+              <figcaption class="media-caption">
+                <span>Imagem orbital NASA (Earth Observatory): Barragem das Três Gargantas, Rio Yangtze, China (30°49'N 111°00'E, 22.500 MW). Domínio Público.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <p class="body-text" style="margin-top: 12px;">
+            O controle de recursos hídricos e redes de transmissão de ultra-alta tensão redefiniu a geopolítica energética no século XX: enquanto <strong>Itaipu</strong> consolidou a integração elétrica binacional sul-americana (50 Hz no Paraguai e 60 Hz no Brasil, interligados via estação conversora HVDC de Foz do Iguaçu), <strong>Três Gargantas</strong> tornou-se a maior central geradora em potência instalada do planeta.
+          </p>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Observe o detalhe técnico de Itaipu: o Brasil opera em 60 Hz e o Paraguai em 50 Hz, exigindo conversão CC/CA para importar o excedente paraguaio para o Sudeste brasileiro.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 28: A SEGUNDA RAMIFICAÇÃO — DA VÁLVULA AO TRANSISTOR (1947)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4: Escala Global & Estado Sólido" data-index="27">
+          <div>
+            <div class="kicker">Módulo 4 • Eletrônica e Informação</div>
+            <h2 class="slide-title">4.3 Da Termiônica ao Transistor de Estado Sólido (Bell Labs, 1947)</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                Paralelamente à engenharia de potência, o <strong>Efeito Edison</strong> (emissão termiônica observada em 1883) deu origem às válvulas a vácuo: o <strong>diodo de Fleming (1904)</strong> e o <strong>triodo Audion de Lee de Forest (1906)</strong>, capazes de amplificar sinais fracos de rádio e telefonia.
+              </p>
+              <p class="body-text" style="margin-top: 10px;">
+                Contudo, válvulas eram frágeis, aqueciam intensamente e consumiam centenas de quilowatts em computadores iniciais como o <strong>ENIAC (1945)</strong>, que possuía ~18.000 válvulas.
+              </p>
+              <div class="concept-strip cyan" style="margin-top: 12px;">
+                <strong>23 de dezembro de 1947 (Bell Labs):</strong> <strong>John Bardeen, Walter Brattain e William Shockley</strong> demonstraram o primeiro <strong>transistor de contato pontual</strong> em germânio, inaugurando a física de semicondutores, os circuitos integrados (Kilby/Noyce, 1958–1959) e a era digital.
+              </div>
+            </div>
+            <figure class="media-figure" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Replica-of-first-transistor.jpg?width=800" alt="Réplica do primeiro transistor de contato pontual construído nos Bell Labs em dezembro de 1947" />
+              <figcaption class="media-caption">
+                <span>Réplica do primeiro transistor de contato pontual (Bell Labs, 1947 — Bardeen, Brattain e Shockley). Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Conecte as duas vertentes da eletricidade: eletricidade como <em>transporte de energia</em> (potência) e eletricidade como <em>portadora de informação</em> (sinais e lógica binária).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 29: DESAFIOS CONTEMPORÂNEOS, CURIOSIDADE & SÍNTESE
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4: Escala Global & Estado Sólido" data-index="28">
+          <div>
+            <div class="kicker">Módulo 4 • Século XXI & Síntese</div>
+            <h2 class="slide-title">4.4 Redes Inteligentes (Smart Grids), Transição Energética e Síntese</h2>
+          </div>
+          <div class="grid-2">
+            <div>
+              <p class="body-text">
+                No século XXI, as duas linhagens históricas da eletricidade — <strong>potência</strong> e <strong>informação</strong> — fundem-se nas <strong>Smart Grids</strong>:
+              </p>
+              <ul class="data-list" style="margin-top: 10px;">
+                <li><strong>Fluxo Bidirecional:</strong> Consumidores tornam-se <em>prossumidores</em> via geração solar fotovoltaica distribuída.</li>
+                <li><strong>Eletrônica de Potência e Armazenamento:</strong> Baterias de íons de lítio (Prêmio Nobel de Química de 2019: Goodenough, Whittingham e Yoshino) e inversores inteligentes estabilizam fontes intermitentes (eólica e solar).</li>
+              </ul>
+              <button class="reveal-btn" style="margin-top: 14px;" onclick="toggleReveal('curiosity-m4')">Curiosidade: O Elétron Antes do Transistor</button>
+              <div id="curiosity-m4" class="reveal-box">
+                <strong>De "Fluido" a Partícula Fundamental:</strong> Durante quase 150 anos após Franklin, toda a engenharia de telégrafos, motores e geradores foi desenvolvida sem saber o que era a carga elétrica em nível subatômico — apenas em <strong>1897</strong>, J.J. Thomson identificou o elétron em experimentos com raios catódicos, abrindo caminho para a mecânica quântica dos semicondutores.
+              </div>
+            </div>
+            <div class="sim-panel">
+              <strong style="color: var(--accent-amber); display: block; margin-bottom: 10px;">Síntese do Módulo 4</strong>
+              <ul class="data-list">
+                <li><strong>Escala Continental (1895–Hoje):</strong> De Niagara Falls a Itaipu e Três Gargantas, a geração centralizada interligada por alta tensão CA e HVDC sustentou a urbanização global.</li>
+                <li><strong>Revolução do Estado Sólido (1947):</strong> O transistor substituiu válvulas termiônicas, viabilizando microprocessadores e telecomunicações digitais.</li>
+                <li><strong>Convergência Atual:</strong> Redes elétricas digitalizadas integram geração renovável distribuída, sensores em tempo real e armazenamento eletroquímico avançado.</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Feche o Módulo 4 mostrando que a transição energética atual é a 4ª grande transformação das redes elétricas desde Pearl Street (1882).
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 30: QUIZ 1 (CONHECIMENTO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4 • Quiz" data-index="29">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 4 • Quiz 1 de 3 — Conhecimento</span>
+              <h2 class="slide-title">Marco Histórico da Geração Hidrelétrica em Escala</h2>
+              <p class="quiz-question">
+                Qual empreendimento de 1895–1896 consolidou definitivamente a viabilidade comercial da geração hidrelétrica polifásica em corrente alternada com transmissão a longa distância para um centro urbano industrial?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m4-1">
+              <button class="quiz-opt" onclick="selectOpt('m4-1', 0, this)"><span class="opt-letter">A</span><span>A Estação Central de Pearl Street, em Manhattan, operando em 110 V CC.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m4-1', 1, this)"><span class="opt-letter">B</span><span>A Usina Hidrelétrica Edward Dean Adams, em Niagara Falls, transmitindo energia para Buffalo (NY).</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m4-1', 2, this)"><span class="opt-letter">C</span><span>O laboratório de Menlo Park, utilizando baterias primárias de zinco e ácido sulfúrico.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m4-1', 3, this)"><span class="opt-letter">D</span><span>A Usina Binacional de Itaipu, inaugurada na década de 1890 no Rio Paraná.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m4-1" disabled onclick="submitQuiz('m4-1', 1, 'Correto! Os geradores Westinghouse/Tesla de Niagara Falls (1895) transmitiram energia a 11 kV até Buffalo (35 km), tornando-se o paradigma das grandes usinas hidrelétricas do século XX.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m4-1"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 31: QUIZ 2 (INTERPRETAÇÃO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4 • Quiz" data-index="30">
+          <div class="quiz-layout with-media">
+            <figure class="media-figure contain" onclick="openLightbox(this)">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Replica-of-first-transistor.jpg?width=800" alt="Réplica do primeiro transistor de 1947" />
+              <figcaption class="media-caption">
+                <span>Transistor de contato pontual de 1947 (Bell Labs). Wikimedia Commons.</span>
+                <span class="zoom-hint">[Ampliar]</span>
+              </figcaption>
+            </figure>
+            <div>
+              <span class="quiz-badge">Módulo 4 • Quiz 2 de 3 — Interpretação</span>
+              <h2 class="slide-title">Impacto Tecnológico do Estado Sólido</h2>
+              <p class="quiz-question">
+                Observando o primeiro transistor de 1947 ao lado, qual limitação física das antigas válvulas termiônicas (diodos e triodos a vácuo) esse dispositivo de semicondutor superou para tornar possível a computação moderna?
+              </p>
+              <div class="quiz-options" id="q-m4-2">
+                <button class="quiz-opt" onclick="selectOpt('m4-2', 0, this)"><span class="opt-letter">A</span><span>Eliminou a necessidade de aquecer um filamento metálico no vácuo, reduzindo drasticamente o consumo de energia, o calor dissipado, a fragilidade mecânica e o volume físico.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m4-2', 1, this)"><span class="opt-letter">B</span><span>Substituiu a eletricidade por transmissão puramente hidráulica no interior dos computadores.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m4-2', 2, this)"><span class="opt-letter">C</span><span>Permitiu gerar megawatts de energia elétrica a partir do atrito de cristais de germânio.</span></button>
+                <button class="quiz-opt" onclick="selectOpt('m4-2', 3, this)"><span class="opt-letter">D</span><span>Aumentou o tamanho de cada porta lógica para melhorar a refrigeração natural.</span></button>
+              </div>
+              <div class="quiz-actions">
+                <button class="btn-primary" id="btn-m4-2" disabled onclick="submitQuiz('m4-2', 0, 'Perfeito! Ao controlar o fluxo de portadores no interior de um cristal semicondutor sólido sem filamento incandescente, o transistor abriu caminho para a miniaturização exponencial (Lei de Moore).')">Confirmar Resposta</button>
+                <button class="btn-secondary" onclick="nextSlide()">Próximo Quiz →</button>
+              </div>
+              <div class="quiz-feedback" id="fb-m4-2"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MÓDULO 4 — SLIDE 32: QUIZ 3 (DESAFIO)
+             ================================================================ -->
+        <section class="slide" data-module="Módulo 4 • Quiz" data-index="31">
+          <div class="quiz-layout">
+            <div>
+              <span class="quiz-badge">Módulo 4 • Quiz 3 de 3 — Desafio</span>
+              <h2 class="slide-title">Síntese Histórica: Da Unidirecionalidade às Smart Grids</h2>
+              <p class="quiz-question">
+                Considerando a evolução histórica das redes elétricas desde Pearl Street (1882) até os sistemas contemporâneos do século XXI, qual afirmação sintetiza corretamente a transformação estrutural em curso?
+              </p>
+            </div>
+            <div class="quiz-options" id="q-m4-3">
+              <button class="quiz-opt" onclick="selectOpt('m4-3', 0, this)"><span class="opt-letter">A</span><span>As redes modernas abandonaram completamente a corrente alternada e retornaram às usinas locais de 110 V CC sem conversão eletrônica.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m4-3', 1, this)"><span class="opt-letter">B</span><span>A separação entre engenharia de potência e eletrônica de informação tornou-se absoluta, impedindo o monitoramento digital das linhas de transmissão.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m4-3', 2, this)"><span class="opt-letter">C</span><span>As redes evoluem de um modelo centralizado e unidirecional para arquiteturas híbridas e bidirecionais, combinando transmissão em ultra-alta tensão (CA e HVDC), geração renovável distribuída e controle digital em tempo real.</span></button>
+              <button class="quiz-opt" onclick="selectOpt('m4-3', 3, this)"><span class="opt-letter">D</span><span>O armazenamento eletroquímico perdeu relevância após 1831, não desempenhando nenhum papel na estabilização de fontes solares e eólicas.</span></button>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn-primary" id="btn-m4-3" disabled onclick="submitQuiz('m4-3', 2, 'Excelente síntese! O século XXI integra os dois ramos desta aula: sistemas de potência interligados e eletrônica de estado sólido para gerenciar fluxos bidirecionais e fontes renováveis.')">Confirmar Resposta</button>
+              <button class="btn-secondary" onclick="nextSlide()">Ir para Revisão Geral →</button>
+            </div>
+            <div class="quiz-feedback" id="fb-m4-3"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SLIDE 33: REVISÃO GERAL & MAPA DE CONVERGÊNCIA HISTÓRICA
+             ================================================================ -->
+        <section class="slide" data-module="Revisão Geral" data-index="32">
+          <div>
+            <div class="kicker">Síntese Integradora • Quatro Séculos em Perspectiva</div>
+            <h2 class="slide-title">Revisão Geral: A Trajetória Sociotécnica da Eletricidade</h2>
+          </div>
+          <div class="grid-2-equal">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div class="concept-strip">
+                <strong>1600–1800 • Domesticação da Carga:</strong> De Gilbert e Guericke à Garrafa de Leiden (1745) e à Pilha de Volta (1800) — passagem das descargas estáticas para a corrente contínua estacionária.
+              </div>
+              <div class="concept-strip cyan">
+                <strong>1820–1888 • Síntese Eletromagnética:</strong> Ørsted, Ampère, Faraday (indução, 1831), Maxwell (equações de campo, 1865) e Hertz (ondas de rádio, 1887) unificam força motriz e telecomunicações.
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div class="concept-strip">
+                <strong>1879–1896 • Infraestrutura de Rede:</strong> Edison inaugura o sistema comercial em Pearl Street (1882); Tesla e Westinghouse viabilizam a transmissão CA polifásica em alta tensão (Niágara, 1895).
+              </div>
+              <div class="concept-strip cyan">
+                <strong>1947–Século XXI • Potência e Informação:</strong> Do transistor de estado sólido (Bell Labs) às grandes hidrelétricas (Itaipu, Três Gargantas) e às Smart Grids bidirecionais.
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-elevated); padding: 14px 20px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+            <div>
+              <strong>Desempenho Acumulado na Turma:</strong> <span id="finalScoreSummary" style="color: var(--accent-amber); font-weight: 700;">0 de 12 questões respondidas corretamente</span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-secondary" onclick="openReviewModal()">Revisar Gabaritos</button>
+              <button class="btn-primary" onclick="nextSlide()">Fontes e Encerramento →</button>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Nota Pedagógica:</strong> Utilize o botão "Revisar Gabaritos" para comentar coletivamente as questões com maior índice de dúvida antes de encerrar a aula.
+          </aside>
+        </section>
+
+        <!-- ================================================================
+             SLIDE 34: FONTES ACADÊMICAS, CRÉDITOS VISUAIS E ENCERRAMENTO
+             ================================================================ -->
+        <section class="slide" data-module="Fontes & Encerramento" data-index="33">
+          <div>
+            <div class="kicker">Referências Bibliográficas & Créditos Iconográficos</div>
+            <h2 class="slide-title">Fontes Consultadas e Encerramento da Aula</h2>
+          </div>
+          <div class="grid-2-equal">
+            <div>
+              <h3 style="font-size: 1rem; color: var(--accent-amber); margin-bottom: 8px;">Referências Históricas e Técnicas</h3>
+              <ul class="data-list" style="font-size: 0.86rem;">
+                <li><strong>HUGHES, Thomas P.</strong> <em>Networks of Power: Electrification in Western Society, 1880–1930</em>. Johns Hopkins University Press, 1983.</li>
+                <li><strong>HEILBRON, John L.</strong> <em>Electricity in the 17th and 18th Centuries: A Study of Early Modern Physics</em>. University of California Press, 1979.</li>
+                <li><strong>DARRIGOL, Olivier.</strong> <em>Electrodynamics from Ampère to Einstein</em>. Oxford University Press, 2000.</li>
+                <li><strong>IEEE History Center / ETHW.</strong> <em>Milestones: Pearl Street Station (1882), Niagara Falls (1895) & Point-Contact Transistor (1947)</em>.</li>
+                <li><strong>ITAIPU BINACIONAL & ONS.</strong> Dados históricos e técnicos de geração e transmissão em alta tensão (CA e HVDC).</li>
+              </ul>
+            </div>
+            <div>
+              <h3 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 8px;">Créditos das Imagens (Repositórios Públicos)</h3>
+              <ul class="data-list" style="font-size: 0.86rem;">
+                <li><strong>Wikimedia Commons (Domínio Público):</strong> Benjamin West (<em>Franklin Drawing Electricity</em>), Gerador de Guericke, Garrafa de Leiden, Pranchas de Galvani (1791), Disco de Faraday (1831), Antena de Hertz (1888), Cabos de Pearl Street (1882), Geradores de Niagara Falls (1904).</li>
+                <li><strong>NASA Earth Observatory (PD-USGov):</strong> Imagem orbital da Barragem das Três Gargantas (2011).</li>
+                <li><strong>Wikimedia Commons (CC BY / CC BY-SA):</strong> Pilha de Volta (Tempio Voltiano), Lâmpada de Edison (1879), Motor de Indução de Tesla (Imperial College), Vista Aérea de Itaipu (2013), Réplica do Transistor de 1947.</li>
+              </ul>
+              <div style="margin-top: 14px; display: flex; gap: 10px;">
+                <button class="btn-secondary" onclick="goToSlide(0)">↺ Voltar ao Início</button>
+                <button class="btn-secondary" onclick="resetAllQuizzes()">Reiniciar Quizzes</button>
+              </div>
+            </div>
+          </div>
+          <aside class="teacher-note">
+            <strong>Encerramento (Prof. André Lourenço):</strong> Tempo total previsto concluído (~15 min). O arquivo HTML salva localmente o progresso dos quizzes para revisão posterior dos discentes.
+          </aside>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- CONTROL BAR INFERIOR -->
+    <footer class="controlbar">
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="goToSlide(0)" title="Início">⌂ Início</button>
+        <button class="ctrl-btn" onclick="toggleModal('modulesModal')" title="Menu de Módulos">☰ Módulos</button>
+        <button class="ctrl-btn" id="notesToggleBtn" onclick="toggleTeacherNotes()" title="Notas Pedagógicas do Professor">Notas Prof.</button>
+      </div>
+
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="prevSlide()" aria-label="Slide anterior">← Anterior</button>
+        <span class="slide-counter" id="slideCounter">01 / 34</span>
+        <button class="ctrl-btn" onclick="nextSlide()" aria-label="Próximo slide">Próximo →</button>
+      </div>
+
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="openReviewModal()" title="Revisar respostas dos quizzes">Revisar Quizzes</button>
+        <button class="ctrl-btn" onclick="resetAllQuizzes()" title="Zerar pontuação">Reiniciar</button>
+        <button class="ctrl-btn" id="projToggleBtn" onclick="toggleProjectorMode()" title="Alto contraste para projetor">Projetor</button>
+        <button class="ctrl-btn" onclick="toggleFullScreen()" title="Tela cheia">⛶ Tela Cheia</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL: ÍNDICE DE MÓDULOS -->
+  <div class="modal-overlay" id="modulesModal" onclick="if(event.target===this) toggleModal('modulesModal')">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:1.25rem;">Navegação por Módulos — História da Eletricidade</h3>
+        <button class="ctrl-btn" onclick="toggleModal('modulesModal')">Fechar ✕</button>
+      </div>
+      <div id="modulesList"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: REVISÃO DE RESPOSTAS -->
+  <div class="modal-overlay" id="reviewModal" onclick="if(event.target===this) toggleModal('reviewModal')">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:1.25rem;">Relatório de Desempenho nos Quizzes</h3>
+        <button class="ctrl-btn" onclick="toggleModal('reviewModal')">Fechar ✕</button>
+      </div>
+      <div id="reviewBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: LIGHTBOX DE AMPLIAÇÃO DE IMAGEM -->
+  <div class="modal-overlay" id="lightboxModal" onclick="toggleModal('lightboxModal')">
+    <div class="lightbox-content">
+      <img id="lightboxImg" src="" alt="Imagem ampliada" />
+      <p id="lightboxCaption" style="color:#f8fafc; font-size:0.9rem; text-align:center; max-width:85ch;"></p>
+      <button class="ctrl-btn" onclick="toggleModal('lightboxModal')">Fechar Ampliação (ESC)</button>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       ESTADO DA AULA & PERSISTÊNCIA LOCAL
+       ========================================================================== */
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const STORAGE_KEY = 'historia_eletricidade_andre_lourenco_v1';
+    let state = {
+      currentSlide: 0,
+      quizAnswers: {}, // { qId: { selected: number, correct: number, isCorrect: boolean, explanation: string } }
+      selectedPending: {}
+    };
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && typeof saved === 'object') {
+        state = { ...state, ...saved };
+      }
+    } catch (e) {}
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          currentSlide,
+          quizAnswers: state.quizAnswers
+        }));
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       NAVEGAÇÃO DE SLIDES & CONTROLES DO PROFESSOR
+       ========================================================================== */
+    function goToSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      slides[currentSlide].scrollTop = 0;
+
+      const modName = slides[currentSlide].getAttribute('data-module') || '';
+      document.getElementById('moduleIndicator').textContent = modName;
+      document.getElementById('slideCounter').textContent =
+        `${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      document.getElementById('progressFill').style.width =
+        `${((currentSlide + 1) / totalSlides) * 100}%`;
+
+      saveState();
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') nextSlide();
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function toggleTeacherNotes() {
+      document.body.classList.toggle('show-notes');
+      document.getElementById('notesToggleBtn').classList.toggle('active');
+    }
+
+    function toggleProjectorMode() {
+      document.body.classList.toggle('projector-mode');
+      document.getElementById('projToggleBtn').classList.toggle('active');
+    }
+
+    function toggleModal(id) {
+      const el = document.getElementById(id);
+      if (id === 'modulesModal' && !el.classList.contains('open')) buildModulesMenu();
+      el.classList.toggle('open');
+    }
+
+    function openLightbox(figEl) {
+      const img = figEl.querySelector('img');
+      const cap = figEl.querySelector('figcaption span');
+      document.getElementById('lightboxImg').src = img.src;
+      document.getElementById('lightboxCaption').textContent = cap ? cap.textContent : img.alt;
+      document.getElementById('lightboxModal').classList.add('open');
+    }
+
+    function buildModulesMenu() {
+      const container = document.getElementById('modulesList');
+      const entries = [
+        { title: 'Abertura e Objetivos de Aprendizagem', slide: 0, meta: 'Slides 01–02' },
+        { title: 'Módulo 1: Eletrostática, Garrafa de Leiden e Pilha de Volta', slide: 2, meta: 'Slides 03–07 + 3 Quizzes (08–10)' },
+        { title: 'Módulo 2: Unificação Eletromagnética (Ørsted, Faraday, Maxwell, Hertz)', slide: 10, meta: 'Slides 11–15 + 3 Quizzes (16–18)' },
+        { title: 'Módulo 3: Sistemas Elétricos e Guerra das Correntes (CC vs. CA)', slide: 18, meta: 'Slides 19–22 + 3 Quizzes (23–25)' },
+        { title: 'Módulo 4: Escala Continental, Estado Sólido (1947) e Smart Grids', slide: 25, meta: 'Slides 26–29 + 3 Quizzes (30–32)' },
+        { title: 'Revisão Geral, Fontes Acadêmicas e Encerramento', slide: 32, meta: 'Slides 33–34' }
+      ];
+      container.innerHTML = entries.map(item => `
+        <div class="mod-list-item" onclick="goToSlide(${item.slide}); toggleModal('modulesModal');">
+          <strong>${item.title}</strong>
+          <span style="font-size:0.8rem; color:var(--accent-cyan);">${item.meta}</span>
+        </div>
+      `).join('');
+    }
+
+    /* ==========================================================================
+       INTERATIVIDADE: HOTSPOTS, REVEAL, SIMULADOR JOULE, TIMELINE, MATCHING
+       ========================================================================== */
+    const hotspotData = {
+      m1: [
+        {
+          title: '1. Haste Condutora e Esfera Terminal',
+          desc: 'Recebe cargas de um gerador eletrostático externo e as conduz até a armadura metálica interna (ou água acidulada nas versões originais).'
+        },
+        {
+          title: '2. Dielétrico de Vidro Isolante',
+          desc: 'Impede a passagem direta de corrente entre as armaduras interna e externa, permitindo que o campo elétrico polarize o meio e armazene energia eletrostática.'
+        },
+        {
+          title: '3. Armadura Externa Aterrada (Folha Metálica)',
+          desc: 'Acumula carga de sinal oposto por indução eletrostática. Ao conectar externamente as duas armaduras com um condutor, ocorre a centelha de descarga.'
         }
+      ]
+    };
 
-        function openProfessorDashboard() {
-            goToScreen('screen-prof-dashboard');
+    function showHotspot(group, idx, btn) {
+      btn.parentElement.querySelectorAll('.hotspot-pin').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const item = hotspotData[group][idx];
+      document.getElementById(`hotspot-${group}`).innerHTML = `
+        <strong style="color: var(--accent-amber); margin-bottom: 6px;">${item.title}</strong>
+        <p class="body-text">${item.desc}</p>
+      `;
+    }
+
+    function toggleReveal(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+
+    function updateJouleSim() {
+      const V = Number(document.getElementById('sim-v').value);
+      const R = Number(document.getElementById('sim-r').value);
+      const P = 100000; // 100 kW
+      const I = P / V;
+      const lossW = R * I * I;
+      const lossKW = lossW / 1000;
+
+      document.getElementById('sim-v-val').textContent = `${V} V`;
+      document.getElementById('sim-r-val').textContent = `${R.toFixed(1)} Ω`;
+      document.getElementById('sim-i-out').textContent = `${I.toFixed(1)} A`;
+
+      const lossEl = document.getElementById('sim-loss-out');
+      const barEl = document.getElementById('sim-loss-bar');
+      const pct = Math.min(100, (lossKW / 100) * 100);
+
+      if (lossKW > 50) {
+        lossEl.textContent = `${lossKW.toFixed(2)} kW (Perda crítica > 50%!)`;
+        lossEl.style.color = 'var(--accent-rose)';
+        barEl.style.background = 'var(--accent-rose)';
+      } else if (lossKW > 10) {
+        lossEl.textContent = `${lossKW.toFixed(2)} kW (Perda moderada)`;
+        lossEl.style.color = 'var(--accent-amber)';
+        barEl.style.background = 'var(--accent-amber)';
+      } else {
+        lossEl.textContent = `${lossKW.toFixed(2)} kW (Alta eficiência!)`;
+        lossEl.style.color = 'var(--accent-emerald)';
+        barEl.style.background = 'var(--accent-emerald)';
+      }
+      barEl.style.width = `${Math.max(4, pct)}%`;
+    }
+
+    const timelineM2 = [
+      {
+        title: '1831: O Primeiro Gerador Eletromagnético (Disco Homopolar)',
+        text: 'Michael Faraday girou um disco de cobre entre os polos de um ímã em ferradura. O movimento mecânico contínuo cortava as linhas de fluxo magnético, gerando uma corrente contínua constante entre o eixo e a borda do disco.',
+        note: 'Significado Econômico: Pela primeira vez na história, tornou-se possível gerar eletricidade a partir de máquinas a vapor ou quedas d\'água, libertando a humanidade do alto custo do zinco das pilhas químicas.',
+        img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Faraday_disk_generator.jpg?width=800',
+        cap: 'Diagrama do Disco de Faraday (1831), primeiro gerador eletromagnético. Wikimedia Commons (PD).'
+      },
+      {
+        title: '1837: Telégrafo Eletromagnético (Cooke, Wheatstone e Morse)',
+        text: 'A deflexão magnética descoberta por Ørsted foi aplicada à comunicação instantânea: eletroímãs acionados à distância moviam agulhas indicadoras ou registravam pulsos codificados (Código Morse), comprimindo o tempo de comunicação entre cidades e continentes.',
+        note: 'Impacto de Engenharia: O telégrafo impulsionou a padronização de unidades elétricas (ohm, volt, ampère) devido à necessidade de medir atenuação em cabos submarinos transatlânticos (1866).',
+        img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Straight-wire-magnetic-field-compass-needles.jpg?width=800',
+        cap: 'Princípio da deflexão magnética por corrente utilizado nos telégrafos de agulha. Wikimedia Commons.'
+      },
+      {
+        title: '1871: O Dínamo de Zénobe Gramme e a Reversibilidade',
+        text: 'O engenheiro belga Zénobe Gramme aperfeiçoou o induzido em anel com comutador de múltiplos segmentos, produzindo corrente contínua potente e estável em escala fabril.',
+        note: 'Descoberta Acidental (Viena, 1873): Ao conectar acidentalmente um dínamo de Gramme a outro já em funcionamento, o segundo começou a girar como motor — provando a reversibilidade industrial entre gerador e motor.',
+        img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Induction_experiment.png?width=800',
+        cap: 'Princípio de acoplamento eletromagnético aplicado em máquinas rotativas. Wikimedia Commons (PD).'
+      },
+      {
+        title: '1887–1888: Heinrich Hertz e a Comprovação das Ondas Eletromagnéticas',
+        text: 'Em Karlsruhe, Heinrich Hertz construiu um transmissor dipolo de centelha e um receptor ressonante, medindo o comprimento de onda e a velocidade de propagação das ondas previstas por Maxwell 22 anos antes.',
+        note: 'Legado: Confirmou que a luz é uma onda eletromagnética e inaugurou a era da radiodifusão, radar e telecomunicações sem fio.',
+        img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hertz_spark_gap_transmitter_and_parabolic_antenna.png?width=800',
+        cap: 'Transmissor e antena parabólica de Heinrich Hertz (1888). Wikimedia Commons (PD).'
+      }
+    ];
+
+    function selectTimeline(mod, idx, btn) {
+      btn.parentElement.querySelectorAll('.t-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const d = timelineM2[idx];
+      document.getElementById('tl-m2-content').innerHTML = `
+        <div>
+          <h3 style="font-size: 1.2rem; color: var(--accent-amber); margin-bottom: 10px;">${d.title}</h3>
+          <p class="body-text">${d.text}</p>
+          <div class="concept-strip cyan" style="margin-top: 12px;">${d.note}</div>
+        </div>
+        <figure class="media-figure contain" onclick="openLightbox(this)">
+          <img src="${d.img}" alt="${d.title}" />
+          <figcaption class="media-caption">
+            <span>${d.cap}</span>
+            <span class="zoom-hint">[Ampliar]</span>
+          </figcaption>
+        </figure>
+      `;
+    }
+
+    /* Atividade de Associação */
+    const matchState = { left: null, right: null, solved: 0 };
+    function handleMatch(group, side, btn) {
+      if (btn.classList.contains('matched')) return;
+      const root = document.getElementById(`match-${group}`);
+      const colIdx = side === 'left' ? 0 : 1;
+      root.children[colIdx].querySelectorAll('.match-item').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      matchState[side] = btn;
+
+      if (matchState.left && matchState.right) {
+        if (matchState.left.dataset.pair === matchState.right.dataset.pair) {
+          matchState.left.classList.remove('selected');
+          matchState.right.classList.remove('selected');
+          matchState.left.classList.add('matched');
+          matchState.right.classList.add('matched');
+          matchState.solved += 1;
+          document.getElementById(`match-${group}-status`).textContent =
+            `Pares resolvidos: ${matchState.solved} / 3 ${matchState.solved === 3 ? '— Concluído com sucesso!' : ''}`;
+        } else {
+          const l = matchState.left, r = matchState.right;
+          setTimeout(() => { l.classList.remove('selected'); r.classList.remove('selected'); }, 350);
         }
+        matchState.left = null;
+        matchState.right = null;
+      }
+    }
 
-        function renderProfessorDashboard() {
-            const listSets = document.getElementById('prof-sets-list');
-            listSets.innerHTML = '';
-            questionSets.forEach(set => {
-                listSets.innerHTML += `
-                    <div class="card-item">
-                        <div class="card-info">
-                            <h4>${set.name}</h4>
-                            <p>${set.questions.length} questões cadastradas</p>
-                        </div>
-                        <span class="badge-code">${set.id}</span>
-                    </div>
-                `;
-            });
+    /* ==========================================================================
+       SISTEMA DE QUIZZES INTERATIVOS (12 QUESTÕES — 3 POR MÓDULO)
+       ========================================================================== */
+    function selectOpt(qId, optIdx, btn) {
+      if (state.quizAnswers[qId]) return; // Já respondida
+      const container = document.getElementById(`q-${qId}`);
+      container.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.selectedPending[qId] = optIdx;
+      document.getElementById(`btn-${qId}`).disabled = false;
+    }
 
-            const listReports = document.getElementById('prof-reports-list');
-            listReports.innerHTML = '';
-            questionSets.forEach(set => {
-                const setMatches = matchHistory.filter(m => m.activityCode === set.id);
-                listReports.innerHTML += `
-                    <div class="card-item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                        <div style="display: flex; width: 100%; justify-content: space-between;">
-                            <h4>Atividade: ${set.name}</h4>
-                            <span class="badge-code">${set.id}</span>
-                        </div>
-                        <p style="font-size: 0.8rem; color: #8b949e;">Total de participações: <strong>${setMatches.length}</strong></p>
-                        ${fnGetRecentMatchesHTML(setMatches)}
-                    </div>
-                `;
-            });
+    function submitQuiz(qId, correctIdx, explanation) {
+      if (state.quizAnswers[qId]) return;
+      const chosen = state.selectedPending[qId];
+      if (chosen === undefined) return;
+
+      const isCorrect = chosen === correctIdx;
+      state.quizAnswers[qId] = {
+        selected: chosen,
+        correct: correctIdx,
+        isCorrect,
+        explanation
+      };
+      renderQuizResult(qId);
+      updateScoreDisplay();
+      saveState();
+    }
+
+    function renderQuizResult(qId) {
+      const ans = state.quizAnswers[qId];
+      if (!ans) return;
+      const container = document.getElementById(`q-${qId}`);
+      const opts = container.querySelectorAll('.quiz-opt');
+      opts.forEach((opt, idx) => {
+        opt.disabled = true;
+        opt.classList.remove('selected');
+        if (idx === ans.correct) opt.classList.add('correct');
+        else if (idx === ans.selected && !ans.isCorrect) opt.classList.add('wrong');
+      });
+
+      const confirmBtn = document.getElementById(`btn-${qId}`);
+      if (confirmBtn) confirmBtn.disabled = true;
+
+      const fb = document.getElementById(`fb-${qId}`);
+      fb.className = `quiz-feedback show ${ans.isCorrect ? 'ok' : 'err'}`;
+      fb.innerHTML = `<strong>${ans.isCorrect ? '✓ Resposta Correta!' : '✕ Resposta Incorreta.'}</strong> ${ans.explanation}`;
+    }
+
+    function updateScoreDisplay() {
+      const entries = Object.values(state.quizAnswers);
+      const hits = entries.filter(a => a.isCorrect).length;
+      document.getElementById('scoreVal').textContent = hits;
+      const summaryEl = document.getElementById('finalScoreSummary');
+      if (summaryEl) {
+        summaryEl.textContent = `${hits} de 12 questões respondidas corretamente (${entries.length} tentadas)`;
+      }
+    }
+
+    function resetAllQuizzes() {
+      state.quizAnswers = {};
+      state.selectedPending = {};
+      document.querySelectorAll('.quiz-opt').forEach(opt => {
+        opt.disabled = false;
+        opt.classList.remove('selected', 'correct', 'wrong');
+      });
+      document.querySelectorAll('[id^="btn-m"]').forEach(btn => btn.disabled = true);
+      document.querySelectorAll('.quiz-feedback').forEach(fb => {
+        fb.className = 'quiz-feedback';
+        fb.innerHTML = '';
+      });
+      updateScoreDisplay();
+      saveState();
+    }
+
+    function openReviewModal() {
+      const quizIds = ['m1-1','m1-2','m1-3','m2-1','m2-2','m2-3','m3-1','m3-2','m3-3','m4-1','m4-2','m4-3'];
+      const letters = ['A', 'B', 'C', 'D'];
+      const html = quizIds.map((id, i) => {
+        const ans = state.quizAnswers[id];
+        if (!ans) {
+          return `<div class="mod-list-item"><span><strong>Questão ${i + 1} (${id.toUpperCase()})</strong> — Ainda não respondida</span><span style="color:var(--text-muted);">Pendente</span></div>`;
         }
+        return `
+          <div style="padding:12px 14px; border-radius:8px; background:var(--bg-elevated); border-left:4px solid ${ans.isCorrect ? 'var(--accent-emerald)' : 'var(--accent-rose)'}; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <strong>Questão ${i + 1} (${id.toUpperCase()})</strong>
+              <span style="color:${ans.isCorrect ? 'var(--accent-emerald)' : 'var(--accent-rose)'}; font-weight:700;">
+                ${ans.isCorrect ? 'Acerto' : `Erro (Marcada: ${letters[ans.selected]} | Gabarito: ${letters[ans.correct]})`}
+              </span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-secondary);">${ans.explanation}</p>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('reviewBody').innerHTML = html;
+      document.getElementById('reviewModal').classList.add('open');
+    }
 
-        function fnGetRecentMatchesHTML(matches) {
-            if(matches.length === 0) return `<p style="font-size: 0.75rem; font-style: italic;">Nenhum aluno jogou ainda.</p>`;
-            let html = `<table class="ranking-table" style="margin-top: 5px;"><tr><th>Aluno (Real)</th><th>Apelido</th><th>Pontos</th></tr>`;
-            matches.sort((a,b) => b.score - a.score).forEach(m => {
-                html += `<tr><td>${m.realName}</td><td>${m.identity}</td><td>${m.score}</td></tr>`;
-            });
-            html += `</table>`;
-            return html;
-        }
-
-        let tempNewSet = { id: 'HIST' + Math.floor(Math.random()*900+100), name: '', questions: [] };
-
-        function openNewSetModal() {
-            tempNewSet = { id: 'HIST' + Math.floor(Math.random()*900+100), name: '', questions: [] };
-            document.getElementById('set-name-input').value = '';
-            document.getElementById('q-input-enunciado').value = '';
-            document.getElementById('q-input-a').value = '';
-            document.getElementById('q-input-b').value = '';
-            document.getElementById('q-input-c').value = '';
-            document.getElementById('q-input-comment').value = '';
-            goToScreen('screen-prof-editor');
-        }
-
-        function saveNewQuestion() {
-            const setName = document.getElementById('set-name-input').value.trim();
-            const enunciado = document.getElementById('q-input-enunciado').value.trim();
-            const a = document.getElementById('q-input-a').value.trim();
-            const b = document.getElementById('q-input-b').value.trim();
-            const c = document.getElementById('q-input-c').value.trim();
-            const correct = parseInt(document.getElementById('q-input-correct').value);
-            const comment = document.getElementById('q-input-comment').value.trim();
-
-            if(!setName || !enunciado || !a || !b || !c) {
-                alert("Por favor, preencha o nome do conjunto, o enunciado e as alternativas.");
-                return;
-            }
-
-            tempNewSet.name = setName;
-            tempNewSet.questions.push({
-                enunciado: enunciado,
-                options: [a, b, c],
-                correct: correct,
-                comment: comment || "Resposta registrada."
-            });
-
-            alert("Questão adicionada ao conjunto com sucesso!");
-            document.getElementById('q-input-enunciado').value = '';
-            document.getElementById('q-input-a').value = '';
-            document.getElementById('q-input-b').value = '';
-            document.getElementById('q-input-c').value = '';
-            document.getElementById('q-input-comment').value = '';
-        }
-
-        function finishCreatingSet() {
-            if(tempNewSet.questions.length === 0) {
-                alert("Adicione pelo menos uma questão antes de salvar.");
-                return;
-            }
-            questionSets.push(tempNewSet);
-            localStorage.setItem('aura_sets', JSON.stringify(questionSets));
-            alert(`Conjunto criado com sucesso! Código gerado: ${tempNewSet.id}`);
-            openProfessorDashboard();
-        }
-
-        const animaisBrasil = ["Onça-Pintada", "Lobo-Guará", "Arara-Azul", "Boto-Cor-de-Rosa", "Tamanduá-Bandeira", "Tatu-Bola", "Mico-Leão", "Capivara", "Sucuri", "Harpia"];
-
-        function startStudentSession() {
-            const realName = document.getElementById('input-realname').value.trim();
-            const code = document.getElementById('input-code').value.toUpperCase().trim();
-            
-            if(!realName) {
-                alert("Por favor, informe seu nome real para o registro do professor.");
-                return;
-            }
-
-            const foundSet = questionSets.find(s => s.id === code);
-            if(!foundSet) {
-                alert("Código de atividade inválido ou não encontrado. Tente 'HISTDEFAULT'.");
-                return;
-            }
-
-            currentRealName = realName;
-            currentActivityCode = code;
-            currentSet = foundSet;
-            currentActiveQuestions = foundSet.questions;
-
-            const animal = animaisBrasil[Math.floor(Math.random() * animaisBrasil.length)];
-            const numero = Math.floor(Math.random() * 900 + 100);
-            currentIdentity = `🐆 ${animal} ${numero}`;
-            
-            document.getElementById('stat-identity').innerText = currentIdentity;
-            goToScreen('screen-game');
-        }
-
-        let canvas, ctx;
-        let gameInterval = null;
-        let playerX = 180;
-        let invaders = [];
-        let enemySpeed = 1.0;
-        let currentQuestionIndex = 0;
-        let isPausedForQuestion = false;
-        let questionTimerInterval = null;
-        let timeLeft = 15;
-
-        function initGameSession() {
-            canvas = document.getElementById('gameCanvas');
-            ctx = canvas.getContext('2d');
-            score = 0;
-            aura = 50;
-            combo = 1;
-            totalAcertos = 0;
-            maxComboReached = 1;
-            missedCountAfterError = 0;
-            enemySpeed = 1.0;
-            currentQuestionIndex = 0;
-            playerX = canvas.width / 2 - 15;
-
-            invaders = [];
-            for(let r = 0; r < 3; r++) {
-                for(let c = 0; c < 5; c++) {
-                    invaders.push({
-                        x: 35 + c * 65,
-                        y: 35 + r * 35,
-                        width: 35,
-                        height: 22,
-                        alive: true
-                    });
-                }
-            }
-
-            if(gameInterval) clearInterval(gameInterval);
-            gameInterval = setInterval(updateGameLoop, 30);
-            setTimeout(triggerHistoricalDisturbance, 3500);
-        }
-
-        function updateGameLoop() {
-            if(isPausedForQuestion) return;
-
-            let touchWall = false;
-            invaders.forEach(inv => {
-                if(!inv.alive) return;
-                inv.x += 1.2 * enemySpeed;
-                if(inv.x > canvas.width - 45 || inv.x < 10) touchWall = true;
-            });
-
-            if(touchWall) {
-                enemySpeed *= -1;
-                invaders.forEach(inv => inv.y += 12);
-            }
-
-            invaders.forEach(inv => {
-                if(inv.alive && inv.y >= 330) {
-                    aura -= 10;
-                    inv.y = 35;
-                    if(aura <= 0) gameOver("Sua Base Temporal colapsou por falta de Aura.");
-                }
-            });
-
-            drawGameCanvas();
-            updateStatsUI();
-        }
-
-        function drawGameCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#238636';
-            ctx.fillRect(playerX, canvas.height - 25, 40, 15);
-            ctx.fillStyle = '#58a6ff';
-            ctx.fillRect(playerX + 16, canvas.height - 33, 8, 10);
-
-            invaders.forEach(inv => {
-                if(!inv.alive) return;
-                ctx.fillStyle = '#8957e5';
-                ctx.fillRect(inv.x, inv.y, inv.width, inv.height);
-            });
-        }
-
-        function updateStatsUI() {
-            document.getElementById('stat-aura').innerText = `Aura: ${aura}`;
-            document.getElementById('stat-combo').innerText = `Combo: ×${combo}`;
-        }
-
-        function triggerHistoricalDisturbance() {
-            if(currentActiveQuestions.length === 0) return;
-            isPausedForQuestion = true;
-
-            const q = currentActiveQuestions[currentQuestionIndex % currentActiveQuestions.length];
-            document.getElementById('q-enunciado').innerText = q.enunciado;
-            
-            const optionsContainer = document.getElementById('q-options-container');
-            optionsContainer.innerHTML = '';
-            
-            q.options.forEach((optText, index) => {
-                const btn = document.createElement('div');
-                btn.className = 'q-option';
-                btn.innerHTML = `<strong>[ ${String.fromCharCode(65 + index)} ]</strong> ${optText}`;
-                btn.onclick = () => answerQuestion(index, q.correct, q.comment);
-                optionsContainer.appendChild(btn);
-            });
-
-            document.getElementById('q-feedback-box').style.display = 'none';
-            document.getElementById('question-overlay').classList.add('active');
-
-            timeLeft = 15;
-            document.getElementById('timer-bar').style.width = '100%';
-            
-            if(questionTimerInterval) clearInterval(questionTimerInterval);
-            questionTimerInterval = setInterval(() => {
-                timeLeft--;
-                let pct = (timeLeft / 15) * 100;
-                document.getElementById('timer-bar').style.width = `${pct}%`;
-                
-                if(timeLeft <= 0) {
-                    clearInterval(questionTimerInterval);
-                    answerQuestion(-1, q.correct, q.comment);
-                }
-            }, 1000);
-        }
-
-        function answerQuestion(selectedIndex, correctIndex, comment) {
-            clearInterval(questionTimerInterval);
-            const isCorrect = (selectedIndex === correctIndex);
-            
-            const feedbackBox = document.getElementById('q-feedback-box');
-            feedbackBox.style.display = 'block';
-
-            if(isCorrect) {
-                totalAcertos++;
-                feedbackBox.className = "feedback-msg success";
-                feedbackBox.innerHTML = `<strong>⚡ ACERTO!</strong> ${comment}`;
-                
-                let auraGain = (combo === 1) ? 10 : Math.min(10 + (combo - 1) * 5, 30);
-                if(missedCountAfterError > 0) {
-                    auraGain = Math.max(5, auraGain - 5);
-                    missedCountAfterError--;
-                }
-                aura = Math.min(maxAura, aura + auraGain);
-                score += 100 + (combo * 20);
-                combo++;
-                if(combo > maxComboReached) maxComboReached = combo;
-                enemySpeed = Math.max(0.6, enemySpeed * 0.85);
-            } else {
-                feedbackBox.className = "feedback-msg error";
-                feedbackBox.innerHTML = `❌ <strong>ERRO / TIMEOUT!</strong> ${comment}`;
-                combo = 1;
-                missedCountAfterError = 3;
-                enemySpeed = Math.min(2.0, enemySpeed * 1.20);
-            }
-
-            currentQuestionIndex++;
-
-            setTimeout(() => {
-                document.getElementById('question-overlay').classList.remove('active');
-                isPausedForQuestion = false;
-                setTimeout(triggerHistoricalDisturbance, 10000);
-            }, 3000);
-        }
-
-        function gameOver(reason) {
-            clearInterval(gameInterval);
-            if(questionTimerInterval) clearInterval(questionTimerInterval);
-            document.getElementById('question-overlay').classList.remove('active');
-
-            document.getElementById('gameover-reason').innerText = reason;
-            document.getElementById('res-score').innerText = score;
-            document.getElementById('res-combo').innerText = maxComboReached;
-            document.getElementById('res-acertos').innerText = totalAcertos;
-
-            const matchRecord = {
-                realName: currentRealName,
-                identity: currentIdentity,
-                activityCode: currentActivityCode,
-                score: score,
-                acertos: totalAcertos
-            };
-            matchHistory.push(matchRecord);
-            localStorage.setItem('aura_history', JSON.stringify(matchHistory));
-
-            renderClassRanking(currentActivityCode);
-
-            goToScreen('screen-gameover');
-        }
-
-        function renderClassRanking(code) {
-            const tbody = document.getElementById('ranking-tbody');
-            tbody.innerHTML = '';
-            
-            const classMatches = matchHistory
-                .filter(m => m.activityCode === code)
-                .sort((a, b) => b.score - a.score);
-
-            classMatches.forEach((m, index) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}º</td>
-                        <td>${m.identity}</td>
-                        <td><strong>${m.score}</strong></td>
-                    </tr>
-                `;
-            });
-        }
-    </script>
+    /* Inicialização */
+    Object.keys(state.quizAnswers).forEach(renderQuizResult);
+    updateScoreDisplay();
+    updateJouleSim();
+    goToSlide(state.currentSlide || 0);
+  </script>
 </body>
 </html>
